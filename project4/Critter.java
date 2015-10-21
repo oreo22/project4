@@ -163,7 +163,17 @@ public abstract class Critter {
 		for(int x=0; x<CritterWorld.population.size(); x++){
 			CritterWorld.population.get(x).move_flag = false;
 			CritterWorld.population.get(x).doTimeStep(); 
-			
+		}
+		
+		CritterWorld.handleEncounters();
+		CritterWorld.killCritters();
+		
+		for(int x=0; x<Params.refresh_algae_count;x++){
+			Critter newAlgae = new Algae();
+			newAlgae.energy = Params.start_energy;
+			newAlgae.x_coord=newAlgae.getRandomInt(Params.world_width);
+    		newAlgae.y_coord=newAlgae.getRandomInt(Params.world_height);
+    		CritterWorld.population.add(newAlgae);
 		}
 	}
 	

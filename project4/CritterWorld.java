@@ -28,15 +28,18 @@ public static ArrayList<Critter> population=new ArrayList<Critter>();
 	
 	static void handleEncounters(){
 		for(int y=0; y<population.size(); y++){
-			for(int x=y; x<population.size(); x++){
+			for(int x=y+1; x<population.size(); x++){
 				if(population.get(x).getXCoord() == population.get(y).getXCoord() && population.get(x).getYCoord()== population.get(y).getYCoord()){
-					boolean xFight = population.get(x).fight(population.get(y).getClass().toString());
-					boolean yFight = population.get(y).fight(population.get(x).getClass().toString());
 					int xStrength = 0;
 					int yStrength = 0;
+					boolean xFight = population.get(x).fight(population.get(y).getClass().toString());
+					boolean yFight = population.get(y).fight(population.get(x).getClass().toString());
+					
+					
 					if(xFight){ xStrength = Critter.getRandomInt(population.get(x).getEnergy());}
 					if(yFight){ yStrength = Critter.getRandomInt(population.get(y).getEnergy());}
 					//if it's the same position, neither of them ran away successfully.
+					
 					if(population.get(x).getXCoord() == population.get(y).getXCoord() && population.get(x).getYCoord()== population.get(y).getYCoord()){
 						if(xStrength>=yStrength){
 						population.get(x).setEnergy(population.get(x).getEnergy() + population.get(y).getEnergy()/2);
@@ -47,7 +50,6 @@ public static ArrayList<Critter> population=new ArrayList<Critter>();
 							population.get(x).setEnergy(0);
 						}
 					}
-					
 				//solve for unsuccessful run away 
 				
 					
@@ -57,7 +59,14 @@ public static ArrayList<Critter> population=new ArrayList<Critter>();
 			}
 		}
 	}
-
+	//--------------Showing the world: CritterWorld----------
+	static void killCritters(){
+		for(int x=0; x<population.size(); x++){
+			if(population.get(x).getEnergy() <= 0){
+				population.remove(x--);
+			}
+		}
+	}
 //--------------Showing the world: CritterWorld----------
 	static void displayWorld() { //where is 0,0? top left or bottom left?
 		printBorder(); 
