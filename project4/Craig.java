@@ -22,7 +22,6 @@ public class Craig extends Critter {
 	public void doTimeStep() {
 		/* take one step forward */
 		walk(dir);
-		
 		if (getEnergy() > 150) {
 			Craig child = new Craig();
 			for (int k = 0; k < 8; k += 1) {

@@ -3,6 +3,7 @@ package project4;
 import project4.Critter.TestCritter;
 
 public class Algae extends TestCritter {
+	
 
 	public String toString() { return "@"; }
 	

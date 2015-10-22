@@ -6,7 +6,7 @@ import java.util.List;
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
  */
-public abstract class Critter {
+public abstract class Critter{
 	private int energy = 0;	
 	private int x_coord;
 	private int y_coord;
@@ -23,21 +23,23 @@ public abstract class Critter {
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	public String toString() { return ""; }
 	protected int getEnergy() { return energy; }
-	protected int getXCoord() { return x_coord; }
-	protected int getYCoord() { return y_coord; }
-	protected void setEnergy(int newEnergy) { energy = newEnergy; }
+	
+	int getXCoord() { return x_coord; }
+	int getYCoord() { return y_coord; }
+	void setEnergy(int newEnergy) { energy = newEnergy; }
 	
 	protected final void walk(int direction) {
 		if(this.move_flag == false){
 			switch (direction){
-				case 0: y_coord=(y_coord-1)%Params.world_height; 			  break;
-		        case 1: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord-1)%Params.world_height; break;
+				case 0: if(y_coord == 0){ y_coord = Params.world_height-1;}else{y_coord = (y_coord-1)%Params.world_height;}			  break;
+		        case 1: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
 		        case 2: x_coord=(x_coord+1)%Params.world_width;; 			  break;
 		        case 3: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord+1)%Params.world_height; break;
 		        case 4: y_coord=(y_coord+1)%Params.world_height; 			  break;
-		        case 5: x_coord=(x_coord-1)%Params.world_width; y_coord=(y_coord+1)%Params.world_height; break;
-		        case 6: x_coord=(x_coord-1)%Params.world_width;; 			  break;
-		        case 7: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord-1)%Params.world_height; break;
+		        case 5: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} 
+		        		y_coord=(y_coord+1)%Params.world_height; break; //what if it is at 0
+		        case 6: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} break;
+		        case 7: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
 		        default: System.out.println("Invalid direction. Try again."); break;
 			}
 			energy-=Params.walk_energy_cost;
@@ -67,7 +69,16 @@ public abstract class Critter {
 			energy-=Params.run_energy_cost;
 		}
 	}
-	protected final void reproduce(Critter offspring, int direction) {
+	protected final void reproduce(Critter offspring, int direction){
+		if(this.energy <= Params.min_reproduce_energy){
+			return;
+		}
+			this.energy /= 2;
+			offspring.energy = this.energy + Params.walk_energy_cost;
+			offspring.x_coord = offspring.x_coord;
+			offspring.y_coord = offspring.y_coord;
+			offspring.walk(direction);
+			babies.add(offspring);
 	}
 
 	public abstract void doTimeStep();
@@ -156,8 +167,7 @@ public abstract class Critter {
 		}
 	}
 	
-	private	static List<Critter> population = new java.util.ArrayList<Critter>();
-	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	public static List<Critter> babies = new java.util.ArrayList<Critter>();
 	
 	public static void worldTimeStep() {
 		for(int x=0; x<CritterWorld.population.size(); x++){
@@ -167,6 +177,7 @@ public abstract class Critter {
 		
 		CritterWorld.handleEncounters();
 		CritterWorld.killCritters();
+		CritterWorld.populatebabies();
 		
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
