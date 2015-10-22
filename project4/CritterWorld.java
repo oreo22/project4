@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class CritterWorld {
 static ArrayList<Critter> population=new ArrayList<Critter>();
+public static boolean fightPhase = false;
 private static String[][] critterWorld = new String[Params.world_width+2][Params.world_height+2];
 	
 //--------------Generating the World--------------	
@@ -38,6 +39,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		}
 	
 	static void handleEncounters(){
+		fightPhase = true;
 		for(int y=0; y<population.size(); y++){
 				for(int x=y+1; x<population.size(); x++){
 					if(population.get(y).getEnergy() > 0 && population.get(x).getEnergy() > 0 && population.get(x).getXCoord() == population.get(y).getXCoord() && population.get(x).getYCoord()== population.get(y).getYCoord()){
@@ -66,6 +68,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 					}
 				}
 		}
+		fightPhase = false;
 	}
 	//--------------Showing the world: CritterWorld----------
 	static void killCritters(){

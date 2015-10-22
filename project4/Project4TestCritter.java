@@ -6,7 +6,7 @@ public class Project4TestCritter extends TestCritter{
 
 	@Override
 	public void doTimeStep() {
-		walk(4);
+		walk(0);
 		this.setEnergy(1000);
 		
 	}
@@ -18,5 +18,5 @@ public class Project4TestCritter extends TestCritter{
 	public String toString(){
 		return "Y";
 	}
-
+	
 }

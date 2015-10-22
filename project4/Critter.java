@@ -28,9 +28,42 @@ public abstract class Critter{
 	int getYCoord() { return y_coord; }
 	void setEnergy(int newEnergy) { energy = newEnergy; }
 	
+	
+	protected int[] findNewLocation(int direction){
+		int[] newCoord=new int[2];
+		newCoord[0] = x_coord;
+		newCoord[1] = y_coord;
+		switch (direction){
+		case 0: if(y_coord == 0){ newCoord[1] = Params.world_height-1;}else{newCoord[1] = (y_coord-1)%Params.world_height;}			  break;
+        case 1: newCoord[0]=(x_coord+1)%Params.world_width; if(y_coord == 0){ newCoord[1] = Params.world_height;}else{newCoord[1] = (y_coord-1)%Params.world_height;} break;
+        case 2: newCoord[0]=(x_coord+1)%Params.world_width; 			  break;
+        case 3: newCoord[0]=(x_coord+1)%Params.world_width; newCoord[1]=(y_coord+1)%Params.world_height; break;
+        case 4: newCoord[1]=(y_coord+1)%Params.world_height; 			  break;
+        case 5: if(x_coord == 0){newCoord[0] = Params.world_width-1;}else{newCoord[0] = (x_coord-1)%Params.world_width;} 
+        		newCoord[1]=(y_coord+1)%Params.world_height; break; //what if it is at 0
+        case 6: if(x_coord == 0){newCoord[0] = Params.world_width-1;}else{newCoord[0] = (x_coord-1)%Params.world_width;} break;
+        case 7: newCoord[0]=(x_coord+1)%Params.world_width; if(y_coord == 0){ newCoord[1] = Params.world_height;}else{newCoord[1] = (y_coord-1)%Params.world_height;} break;
+        default: System.out.println("Invalid direction. Try again."); break;
+        
+		}
+		return newCoord;
+	}
 	protected final void walk(int direction) {
 		if(this.move_flag == false){
-			switch (direction){
+			int[] newCoord=findNewLocation(direction);
+			boolean newLocationIsOccupied = false; //different for fightstage and normal stages
+			/*if(this location is occupied){
+			 * newLocationIsOccupied==true;
+				}*/
+			if(newLocationIsOccupied){
+				//do nothing
+				
+			}
+			else{
+				x_coord=newCoord[0];
+				y_coord=newCoord[1];
+			}
+			/*switch (direction){
 				case 0: if(y_coord == 0){ y_coord = Params.world_height-1;}else{y_coord = (y_coord-1)%Params.world_height;}			  break;
 		        case 1: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
 		        case 2: x_coord=(x_coord+1)%Params.world_width;; 			  break;
@@ -41,7 +74,7 @@ public abstract class Critter{
 		        case 6: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} break;
 		        case 7: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
 		        default: System.out.println("Invalid direction. Try again."); break;
-			}
+			}*/
 			energy-=Params.walk_energy_cost;
 			move_flag=true; //it walked!
 		}
@@ -97,6 +130,10 @@ public abstract class Critter{
 				newSpawn.energy=Params.start_energy;
 	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width);
 	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height);
+	    		if(critter_class_name == "project4.Project4TestCritter"){
+	    			newSpawn.x_coord =0;
+	    			newSpawn.y_coord =  3;
+	    		}
 	    		newSpawn.move_flag = false;
 	    		CritterWorld.population.add(newSpawn);
 			} catch (InstantiationException e) {
