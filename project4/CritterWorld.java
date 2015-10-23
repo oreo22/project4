@@ -1,10 +1,13 @@
 package project4;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CritterWorld {
 static ArrayList<Critter> population=new ArrayList<Critter>();
+static Map<int[],int[] > grid=new HashMap<int[], int[]>();
 public static boolean fightPhase = false;
 private static String[][] critterWorld = new String[Params.world_width+2][Params.world_height+2];
 	
