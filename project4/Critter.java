@@ -1,5 +1,6 @@
 package project4;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* see the PDF for descriptions of the methods and fields in this class
@@ -23,12 +24,7 @@ public abstract class Critter{
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	public String toString() { return ""; }
 	protected int getEnergy() { return energy; }
-	
-	int getXCoord() { return x_coord; }
-	int getYCoord() { return y_coord; }
-	void setEnergy(int newEnergy) { energy = newEnergy; }
-	
-	
+
 	protected int[] findNewLocation(int direction, int step){
 		int[] newCoord=new int[2];
 		newCoord[0] = x_coord;
@@ -196,17 +192,16 @@ public abstract class Critter{
 	}
 	
 	public static List<Critter> babies = new java.util.ArrayList<Critter>();
-	
+
 	public static void worldTimeStep() {
 		for(int x=0; x<CritterWorld.population.size(); x++){
 			CritterWorld.population.get(x).move_flag = false;
 			CritterWorld.population.get(x).doTimeStep(); 
 		}
 		
-		CritterWorld.handleEncounters();
-		CritterWorld.killCritters();
-		CritterWorld.populatebabies();
-		
+		handleEncounters();
+		killCritters();
+		populatebabies();
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
@@ -215,9 +210,76 @@ public abstract class Critter{
     		CritterWorld.population.add(newAlgae);
 		}
 	}
+//------------Critter World Time Step Methods----------	
+	//-------Fighting-------
+	static void handleEncounters(){
+		boolean fightPhase = true;
+		for(int y=0; y<CritterWorld.population.size(); y++){
+				for(int x=y+1; x<CritterWorld.population.size(); x++){
+					if(CritterWorld.population.get(y).energy> 0 && CritterWorld.population.get(x).energy > 0 && CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
+						int xStrength = 0;
+						int yStrength = 0;
+						boolean xFight = CritterWorld.population.get(x).fight(CritterWorld.population.get(y).getClass().toString());
+						boolean yFight = CritterWorld.population.get(y).fight(CritterWorld.population.get(x).getClass().toString());
+						if(xFight){ xStrength = Critter.getRandomInt(CritterWorld.population.get(x).energy);}
+						if(yFight){ yStrength = Critter.getRandomInt(CritterWorld.population.get(y).energy);}
+						//if it's the same position, neither of them ran away successfully.
+						if(CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
+							if(xStrength>=yStrength){
+								CritterWorld.population.get(x).energy=(CritterWorld.population.get(x).energy + CritterWorld.population.get(y).energy/2);
+								CritterWorld.population.get(y).energy=0;
+							}
+							else if(yStrength > xStrength){
+								CritterWorld.population.get(y).energy=(CritterWorld.population.get(y).energy + CritterWorld.population.get(x).energy/2);
+								CritterWorld.population.get(x).energy=0;
+							}
+						}
+					//solve for unsuccessful run away 
+					}
+				}
+		}
+		fightPhase = false;
+	}
+	//--------------Killing Critters----------
+	static void killCritters(){
+		for(int x=0; x<CritterWorld.population.size(); x++){
+			if(CritterWorld.population.get(x).energy <= 0){
+				CritterWorld.population.remove(x--);
+			}
+		}
+	}
+	//----Reproduction-----
+	static void populatebabies() {
+		for(int x=0; x<Critter.babies.size();x++){
+			CritterWorld.population.add(Critter.babies.get(x));
+		}
+		
+		Critter.babies = new ArrayList<Critter>();	
+	}
 	
+//----------Showing the Grid of the World-------
 	public static void displayWorld() {
-		CritterWorld.displayWorld();
+		System.out.println();
+		for(int y=0; y<Params.world_height; y++){
+			System.out.print("|");
+			for(int x=0; x<Params.world_width; x++){ 
+				String output = " ";
+				/*if(grid.get(y).get(x)!=0){
+					int index=grid.get(y).get(x);
+					output=population.get(index).toString();
+				}*/
+				
+				for(int c=0; c<CritterWorld.population.size(); c++){
+					if(CritterWorld.population.get(c).x_coord==x && CritterWorld.population.get(c).y_coord==y){
+						output = CritterWorld.population.get(c).toString();
+						break;
+					}
+				}
+				System.out.print(output);
+			}
+			System.out.print("|");
+			System.out.println();
+		}
 	}
 }
 

@@ -19,7 +19,7 @@ public static void main(String[] args) throws InvalidCritterException {
 //---------Avaliable Commands----------------
 			switch (commands[0]) {
             case "quit": break outerloop;
-            case "show":  Critter.displayWorld(); break;
+            case "show":  CritterWorld.displayWorld(); break;
             case "step":  if(commands.length==1){ CritterWorld.runWorld(1);}
             			  else if(commands.length==2){CritterWorld.runWorld(Integer.parseInt(commands[1]));}
             				break;//put a try catch to see if commands[1] is a number

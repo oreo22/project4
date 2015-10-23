@@ -11,11 +11,29 @@ static ArrayList<Critter> population=new ArrayList<Critter>();
 //static Map<int[],ArrayList<Integer> > grid=new HashMap<int[], ArrayList<Integer>>();
 //static Map<Integer, ArrayList<Integer> > xYKeys=new HashMap<Integer, ArrayList<Integer>>();
 //static Map<Integer,ArrayList<Integer> > grid=new HashMap<Integer, ArrayList<Integer>>();
-static Map<Integer, Map<Integer, ArrayList<Integer>> > grid=new HashMap<Integer, Map<Integer, ArrayList<Integer>>>();
+static Map<Integer, ArrayList<Integer> > grid=new HashMap<Integer, ArrayList<Integer> >();
 
 public static boolean fightPhase = false;
 private static String[][] critterWorld = new String[Params.world_width+2][Params.world_height+2];
-	
+		
+/*static void updateGrid(){
+
+		for(int y=0; y<Params.world_height; y++){
+			
+			for(int x=0; x<Params.world_width; x++){ 
+				ArrayList<Integer> occupants=new ArrayList<Integer>();
+				for(int c=0; c<population.size(); c++){
+					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
+						occupants.add(c); //add this index
+						/*System.out.println(population.get(c).getXCoord() + " " + population.get(c).getYCoord()  );
+						System.out.println("x: " +x+ " y: " + y);
+					}
+				}
+				grid.put(y,occupants);
+			}
+		}
+	} */
+
 //--------------Generating the World--------------	
 	static void makeWorld() throws InvalidCritterException {
 		for(int x=0; x<3; x++){
@@ -26,26 +44,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		}
 		//updateGrid();
 	}
-	
-	static void updateGrid(){
 
-		for(int y=0; y<Params.world_height; y++){
-			
-			for(int x=0; x<Params.world_width; x++){ 
-				ArrayList<Integer> occupants=new ArrayList<Integer>();
-				for(int c=0; c<population.size(); c++){
-					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
-						occupants.add(c); //add this index
-						/*System.out.println(population.get(c).getXCoord() + " " + population.get(c).getYCoord()  );
-						System.out.println("x: " +x+ " y: " + y);*/
-					}
-				}
-				Map temp=new HashMap<Integer, ArrayList<Integer>>(); //there's 15 indexes 
-				temp.put(x, occupants); //give it x, and it'll go to the appropriate x slot
-				grid.put(y, temp); //give it y, and then with that y, go to the right x spot. 
-			}
-		}
-	}
 //-------------Running the World---------------
 	static void runWorld(int steps) {
 		for(int x=0; x<steps;x++){
@@ -54,80 +53,10 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		}
 	}
 	
-//-------------Steps in Running the World---------------
-		//----Reproduction-----
-		static void populatebabies() {
-			for(int x=0; x<Critter.babies.size();x++){
-				population.add(Critter.babies.get(x));
-			}
-			
-			Critter.babies = new ArrayList<Critter>();	
-		}
-	//-------Fighting-------
-	static void handleEncounters(){
-		fightPhase = true;
-		for(int y=0; y<population.size(); y++){
-				for(int x=y+1; x<population.size(); x++){
-					if(population.get(y).getEnergy() > 0 && population.get(x).getEnergy() > 0 && population.get(x).getXCoord() == population.get(y).getXCoord() && population.get(x).getYCoord()== population.get(y).getYCoord()){
-						int xStrength = 0;
-						int yStrength = 0;
-						boolean xFight = population.get(x).fight(population.get(y).getClass().toString());
-						boolean yFight = population.get(y).fight(population.get(x).getClass().toString());
-						if(xFight){ xStrength = Critter.getRandomInt(population.get(x).getEnergy());}
-						if(yFight){ yStrength = Critter.getRandomInt(population.get(y).getEnergy());}
-						//if it's the same position, neither of them ran away successfully.
-						if(population.get(x).getXCoord() == population.get(y).getXCoord() && population.get(x).getYCoord()== population.get(y).getYCoord()){
-							if(xStrength>=yStrength){
-							population.get(x).setEnergy(population.get(x).getEnergy() + population.get(y).getEnergy()/2);
-							population.get(y).setEnergy(0);
-							}
-							else if(yStrength > xStrength){
-								population.get(y).setEnergy(population.get(y).getEnergy() + population.get(x).getEnergy()/2);
-								population.get(x).setEnergy(0);
-							}
-						}
-					//solve for unsuccessful run away 
-					
-						
-						
-	
-					}
-				}
-		}
-		fightPhase = false;
-	}
-	//--------------Killing Critters----------
-	static void killCritters(){
-		for(int x=0; x<population.size(); x++){
-			if(population.get(x).getEnergy() <= 0){
-				population.remove(x--);
-			}
-		}
-	}
 //--------------Showing the world: CritterWorld----------
 	static void displayWorld() { //where is 0,0? top left or bottom left?
 		printBorder(); 
-		System.out.println();
-		for(int y=0; y<Params.world_height; y++){
-			System.out.print("|");
-			for(int x=0; x<Params.world_width; x++){ 
-				String output = " ";
-				/*if(grid.get(y).get(x).size()!=0){
-					int index=grid.get(y).get(x).get(0);
-					output=population.get(index).toString();
-				}*/
-				
-				for(int c=0; c<population.size(); c++){
-					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
-						output = population.get(c).toString();
-						break;
-					}
-				}
-				System.out.print(output);
-			}
-			System.out.print("|");
-			System.out.println();
-		}
+		Critter.displayWorld();
 		printBorder();
 		System.out.println();
 	}
@@ -139,6 +68,8 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		}
 		System.out.print("+");
 	}
+	
+	
 	private static void createWorld(){
 		//Top
 		critterWorld[0][0] = "+";
