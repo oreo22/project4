@@ -61,8 +61,6 @@ public abstract class Critter{
 				//do nothing
 			}
 			else{
-				System.out.println("direction: "+direction + "x: " +x_coord +" vs " + newCoord[0]);
-				System.out.println("direction: "+direction + "y: " +y_coord +" vs " + newCoord[1]);
 				x_coord=newCoord[0];
 				y_coord=newCoord[1];
 			}

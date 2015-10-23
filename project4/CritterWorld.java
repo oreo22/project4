@@ -6,8 +6,13 @@ import java.util.Map;
 
 
 public class CritterWorld {
+
 static ArrayList<Critter> population=new ArrayList<Critter>();
-static Map<int[],int[] > grid=new HashMap<int[], int[]>();
+//static Map<int[],ArrayList<Integer> > grid=new HashMap<int[], ArrayList<Integer>>();
+//static Map<Integer, ArrayList<Integer> > xYKeys=new HashMap<Integer, ArrayList<Integer>>();
+//static Map<Integer,ArrayList<Integer> > grid=new HashMap<Integer, ArrayList<Integer>>();
+static Map<Integer, Map<Integer, ArrayList<Integer>> > grid=new HashMap<Integer, Map<Integer, ArrayList<Integer>>>();
+
 public static boolean fightPhase = false;
 private static String[][] critterWorld = new String[Params.world_width+2][Params.world_height+2];
 	
@@ -19,28 +24,46 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		for(int x=0; x<10; x++){
 			Critter.makeCritter("project4.Algae");
 		}
-		// TODO Auto-generated method stub
-		
+		//updateGrid();
+	}
+	
+	static void updateGrid(){
+
+		for(int y=0; y<Params.world_height; y++){
+			
+			for(int x=0; x<Params.world_width; x++){ 
+				ArrayList<Integer> occupants=new ArrayList<Integer>();
+				for(int c=0; c<population.size(); c++){
+					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
+						occupants.add(c); //add this index
+						/*System.out.println(population.get(c).getXCoord() + " " + population.get(c).getYCoord()  );
+						System.out.println("x: " +x+ " y: " + y);*/
+					}
+				}
+				Map temp=new HashMap<Integer, ArrayList<Integer>>(); //there's 15 indexes 
+				temp.put(x, occupants); //give it x, and it'll go to the appropriate x slot
+				grid.put(y, temp); //give it y, and then with that y, go to the right x spot. 
+			}
+		}
 	}
 //-------------Running the World---------------
 	static void runWorld(int steps) {
 		for(int x=0; x<steps;x++){
 			Critter.TestCritter.worldTimeStep();//run all the time steps
+			//updateGrid();
 		}
-		// TODO Auto-generated method stub
-		
 	}
 	
-//-------------Running the World---------------
+//-------------Steps in Running the World---------------
+		//----Reproduction-----
 		static void populatebabies() {
 			for(int x=0; x<Critter.babies.size();x++){
 				population.add(Critter.babies.get(x));
 			}
 			
-			Critter.babies = new ArrayList<Critter>();
-			
+			Critter.babies = new ArrayList<Critter>();	
 		}
-	
+	//-------Fighting-------
 	static void handleEncounters(){
 		fightPhase = true;
 		for(int y=0; y<population.size(); y++){
@@ -73,7 +96,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		}
 		fightPhase = false;
 	}
-	//--------------Showing the world: CritterWorld----------
+	//--------------Killing Critters----------
 	static void killCritters(){
 		for(int x=0; x<population.size(); x++){
 			if(population.get(x).getEnergy() <= 0){
@@ -85,11 +108,15 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 	static void displayWorld() { //where is 0,0? top left or bottom left?
 		printBorder(); 
 		System.out.println();
-		
 		for(int y=0; y<Params.world_height; y++){
 			System.out.print("|");
 			for(int x=0; x<Params.world_width; x++){ 
 				String output = " ";
+				/*if(grid.get(y).get(x).size()!=0){
+					int index=grid.get(y).get(x).get(0);
+					output=population.get(index).toString();
+				}*/
+				
 				for(int c=0; c<population.size(); c++){
 					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
 						output = population.get(c).toString();
