@@ -112,27 +112,20 @@ public abstract class Critter{
         try { 
             Class<Critter> class_type  = (Class<Critter>) Class.forName(critter_class_name);
     		Critter newSpawn;
-    		try { 
 				newSpawn = class_type.newInstance(); //calling the basic constructor for whatever Critter sub-type was given
 				newSpawn.energy=Params.start_energy;
-	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width-1);
-	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height-1);
+	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width);
+	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height);
 	    		if(critter_class_name == "project4.Project4TestCritter"){
 	    			newSpawn.x_coord =0;
 	    			newSpawn.y_coord =  3;
 	    		}
 	    		newSpawn.move_flag = false;
 	    		CritterWorld.population.add(newSpawn);
-			} catch (InstantiationException e) {
-				System.out.println("This type is not concrete. Choose another type");
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				System.out.println("Unauthorized Access. Try again.");
-				e.printStackTrace();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				Throwable x=new InvalidCritterException(critter_class_name);
+				System.out.println(x.toString());
 			}
-        } catch (ClassNotFoundException e) {
-        	System.out.println("Invalid class name: "+critter_class_name);
-        }
         
 		/*If the random location selected for the critter is already 
 		 * occupied, the critter should be placed into that position anyway. 
