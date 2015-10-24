@@ -19,7 +19,7 @@ public static void main(String[] args) throws InvalidCritterException {
 //---------Available Commands----------------
 			switch (commands[0]) {
             case "quit": break outerloop;
-            case "show":  Critter.displayWorld(); break;
+            case "show":  CritterWorld.displayWorld(); break;
             case "step":  if(commands.length==1){ CritterWorld.runWorld(1);}
             			  else if(commands.length==2){CritterWorld.runWorld(Integer.parseInt(commands[1]));}
             				break;//put a try catch to see if commands[1] is a number
@@ -28,8 +28,6 @@ public static void main(String[] args) throws InvalidCritterException {
                         else{count=Integer.parseInt(commands[2]);}; 
                         for(int x=0; x<count; x++){Critter.makeCritter(commands[1]);} break;
            case "stats": Critter.getInstances(commands[1]); break;
-           case "resolve": Critter.handleEncounters(); break;
-           case "kill": Critter.killCritters(); break;
            case "class_name": System.out.print("Work in Progress for class_name"); break;
            default: System.out.println("Invalid command. Try again."); break;
 			}
