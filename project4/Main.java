@@ -29,8 +29,6 @@ public static void main(String[] args) throws InvalidCritterException {
             			 else{count=Integer.parseInt(commands[2]);}; 
             			 for(int x=0; x<count; x++){Critter.makeCritter(commands[1]);} break;
             case "stats": Critter.getInstances(commands[1]); break;
-            case "resolve": Critter.handleEncounters(); break;
-            case "kill": Critter.killCritters(); break;
             default: System.out.println("invalid command: " + commandLine); break;
 			}
 	}
