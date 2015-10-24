@@ -115,8 +115,8 @@ public abstract class Critter{
     		try { 
 				newSpawn = class_type.newInstance(); //calling the basic constructor for whatever Critter sub-type was given
 				newSpawn.energy=Params.start_energy;
-	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width);
-	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height);
+	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width-1);
+	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height-1);
 	    		if(critter_class_name == "project4.Project4TestCritter"){
 	    			newSpawn.x_coord =0;
 	    			newSpawn.y_coord =  3;
@@ -143,7 +143,17 @@ public abstract class Critter{
 	
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();
-	
+		for(int x=0; x<CritterWorld.population.size(); x++){
+			try {
+				if(Class.forName(critter_class_name).isInstance(CritterWorld.population.get(x))){
+					result.add(CritterWorld.population.get(x));
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		runStats(result);
 		return result;
 	}
 	
@@ -196,6 +206,7 @@ public abstract class Critter{
 	public static void worldTimeStep() {
 		for(int x=0; x<CritterWorld.population.size(); x++){
 			CritterWorld.population.get(x).move_flag = false;
+			CritterWorld.population.get(x).energy -= Params.rest_energy_cost;
 			CritterWorld.population.get(x).doTimeStep(); 
 		}
 		
@@ -213,7 +224,7 @@ public abstract class Critter{
 //------------Critter World Time Step Methods----------	
 	//-------Fighting-------
 	static void handleEncounters(){
-		boolean fightPhase = true;
+		CritterWorld.fightPhase = true;
 		for(int y=0; y<CritterWorld.population.size(); y++){
 				for(int x=y+1; x<CritterWorld.population.size(); x++){
 					if(CritterWorld.population.get(y).energy> 0 && CritterWorld.population.get(x).energy > 0 && CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
@@ -238,7 +249,7 @@ public abstract class Critter{
 					}
 				}
 		}
-		fightPhase = false;
+		CritterWorld.fightPhase = false;
 	}
 	//--------------Killing Critters----------
 	static void killCritters(){
@@ -248,6 +259,8 @@ public abstract class Critter{
 			}
 		}
 	}
+
+	
 	//----Reproduction-----
 	static void populatebabies() {
 		for(int x=0; x<Critter.babies.size();x++){
