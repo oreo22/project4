@@ -10,10 +10,7 @@ public class Margret extends Critter{
 		int action=Critter.getRandomInt(2);
 		int direction=Critter.getRandomInt(8);
 		if( action>=1){
-			walk(direction);
-		}
-		else{
-			//do nothing
+			run(direction);
 		}
 	}
 

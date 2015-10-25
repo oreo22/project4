@@ -24,13 +24,12 @@ public class Jeho extends Critter{
 	}
 
 	@Override
-	public boolean fight(String oponent) {
-		int direction=Critter.getRandomInt(8);
+	public boolean fight(String oponent) {;
 		int roll= Critter.getRandomInt(5);
-		if(oponent== "project4.Craig"){
+		if(oponent.equals("project4.Craig")){
 			return true;
 		}
-		else if(oponent=="project4.Student"){
+		else if(oponent.equals("project4.Student")){
 			if(roll>=3){
 				return true;
 			}
