@@ -137,8 +137,7 @@ public abstract class Critter{
 	    		newSpawn.move_flag = false;
 	    		CritterWorld.population.add(newSpawn);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-				Throwable x=new InvalidCritterException(critter_class_name);
-				System.out.println(x.toString());
+				throw new InvalidCritterException(critter_class_name);
 			}
         
 		/*If the random location selected for the critter is already 
@@ -237,8 +236,8 @@ public abstract class Critter{
 					if(CritterWorld.population.get(y).energy> 0 && CritterWorld.population.get(x).energy > 0 && CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
 						int xStrength = 0;
 						int yStrength = 0;
-						boolean xFight = CritterWorld.population.get(x).fight(CritterWorld.population.get(y).getClass().toString());
-						boolean yFight = CritterWorld.population.get(y).fight(CritterWorld.population.get(x).getClass().toString());
+						boolean xFight = CritterWorld.population.get(x).fight(CritterWorld.population.get(y).getClass().getName());
+						boolean yFight = CritterWorld.population.get(y).fight(CritterWorld.population.get(x).getClass().getName());
 						if(xFight){ xStrength = Critter.getRandomInt(CritterWorld.population.get(x).energy);}
 						if(yFight){ yStrength = Critter.getRandomInt(CritterWorld.population.get(y).energy);}
 						//if it's the same position, neither of them ran away successfully.

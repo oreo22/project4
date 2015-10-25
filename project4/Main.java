@@ -43,7 +43,17 @@ public static void main(String[] args) throws InvalidCritterException {
 						int count = 0; 
 						if(commands.length == 2){count=1;}
 						else{count=Integer.parseInt(commands[2]);}
-						for(int x=0; x<count; x++){Critter.makeCritter(commands[1]);}         
+						
+						for(int x=0; x<count; x++){
+							try{
+							Critter.makeCritter(commands[1]);
+							}catch(InvalidCritterException e){
+								System.out.println(e.toString());
+								break;
+							}
+							
+							} 
+						
 				}
 				else{ invalidCommand(commandLine);}
 			}catch(Throwable x){;
