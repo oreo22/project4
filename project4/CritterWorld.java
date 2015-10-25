@@ -48,7 +48,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 //-------------Running the World---------------
 	static void runWorld(int steps) {
 		for(int x=0; x<steps;x++){
-			Critter.TestCritter.worldTimeStep();//run all the time steps
+			Critter.worldTimeStep();//run all the time steps
 			//updateGrid();
 		}
 	}

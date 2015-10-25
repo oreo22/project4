@@ -25,8 +25,18 @@ public abstract class Critter{
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	public String toString() { return ""; }
 	protected int getEnergy() { return energy; }
-
-	protected int[] findNewLocation(int direction, int step){
+	
+	
+	private boolean adjacentLocationOccupied(int x, int y){
+		for(int z=0; z<CritterWorld.population.size(); z++){
+			if(CritterWorld.population.get(z).x_coord == x && CritterWorld.population.get(z).y_coord == y){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private int[] findNewLocation(int direction, int step){
 		int[] newCoord=new int[2];
 		newCoord[0] = x_coord;
 		newCoord[1] = y_coord;
@@ -48,47 +58,50 @@ public abstract class Critter{
 	protected final void walk(int direction) {
 		if(this.move_flag == false){
 			int[] newCoord=findNewLocation(direction,1);
-			boolean newLocationIsOccupied = false; //different for fightstage and normal stages
+			if(CritterWorld.fightPhase){
+				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
+					x_coord=newCoord[0];
+					y_coord=newCoord[1];
+				}
+			}
+				 //different for fightstage and normal stages
 			//only set newLocationIsOccupied if it's fightPhase
 			/*if(this location is occupied && CritterWorld.fightPhase==true ){
 			 * newLocationIsOccupied==true;
 				}*/
 			
-			if(newLocationIsOccupied){
-				//do nothing
-			}
 			else{
 				x_coord=newCoord[0];
 				y_coord=newCoord[1];
 			}
-			energy-=Params.walk_energy_cost;
+			
 			move_flag=true; //it walked!
 		}
-		else{
-			energy-=Params.walk_energy_cost;
-		}
+		energy-=Params.walk_energy_cost;
 	}
 	protected final void run(int direction) {
 		if(this.move_flag == false){
-			int[] newCoord=findNewLocation(direction,2);
-			boolean newLocationIsOccupied = false; //different for fightstage and normal stages
-			/*if(this location is occupied){
+			int[] newCoord=findNewLocation(direction,1);
+			if(CritterWorld.fightPhase){
+				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
+					x_coord=newCoord[0];
+					y_coord=newCoord[1];
+				}
+			}
+				 //different for fightstage and normal stages
+			//only set newLocationIsOccupied if it's fightPhase
+			/*if(this location is occupied && CritterWorld.fightPhase==true ){
 			 * newLocationIsOccupied==true;
 				}*/
-			if(newLocationIsOccupied){
-				//do nothing
-				
-			}
+			
 			else{
 				x_coord=newCoord[0];
 				y_coord=newCoord[1];
 			}
-			energy-=Params.run_energy_cost;
-			move_flag=true; //it ran!
+			
+			move_flag=true; //it walked!
 		}
-		else{
-			energy-=Params.run_energy_cost;
-		}
+		energy-=Params.run_energy_cost;
 	}
 	protected final void reproduce(Critter offspring, int direction){
 		if(this.energy <= Params.min_reproduce_energy){
