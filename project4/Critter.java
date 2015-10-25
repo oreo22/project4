@@ -299,7 +299,7 @@ public abstract class Critter{
 						occupants.add(c); //add this index
 					}
 				}
-				xKeys.put(x,occupants);
+				xKeys.put(x,occupants); //make a bunch of x keys to arrays of indexes
 			}
 			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position			
 		} 
