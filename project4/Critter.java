@@ -1,7 +1,9 @@
 package project4;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -202,7 +204,7 @@ public abstract class Critter{
 			CritterWorld.population.get(x).energy -= Params.rest_energy_cost;
 			CritterWorld.population.get(x).doTimeStep(); 
 		}
-		
+		updateGrid();
 		handleEncounters();
 		killCritters();
 		populatebabies();
@@ -285,6 +287,42 @@ public abstract class Critter{
 			}
 			System.out.print("|");
 			System.out.println();
+		}
+	}
+
+	static void updateGrid(){
+		//test variables
+		try{
+		String character=" ";
+		int[] coords=new int[2];
+		for(int y=0; y<Params.world_height; y++){
+			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
+			for(int x=0; x<Params.world_width; x++){ 
+				ArrayList<Integer> occupants=new ArrayList<Integer>();
+				for(int c=0; c<CritterWorld.population.size(); c++){
+					if(CritterWorld.population.get(c).x_coord==x && CritterWorld.population.get(c).y_coord==y){
+						occupants.add(c); //add this index
+						character=occupants.get(c).toString();
+						coords[0]=x;
+						coords[1]=y;
+						System.out.print(character + "is the character at: ");
+						System.out.println(coords[0] + " y: " + coords[1]);
+					}
+				}
+				xKeys.put(x,occupants); //put into this map all the arrays with characters
+			//when should i put the list of x coordinates at that x in?
+			}
+			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position
+			
+			
+		} 
+		System.out.print(character + "is the character at: ");
+		System.out.println(coords[0] + " y: " + coords[1]);
+		Map<Integer, ArrayList<Integer> > temp= new HashMap<Integer, ArrayList<Integer> >();
+		temp= CritterWorld.grid1.get(coords[1]);
+		System.out.println(( CritterWorld.grid1.get(coords[1])).get(coords[0]).get(0).toString()  );
+		} catch(Throwable x){
+			x.getCause();
 		}
 	}
 }
