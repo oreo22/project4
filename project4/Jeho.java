@@ -1,7 +1,7 @@
 package project4;
 
 public class Jeho extends Critter{
-	String degree;
+	private String degree;
 	
 	public Jeho(){
 		degree = "masters";
@@ -36,7 +36,7 @@ public class Jeho extends Critter{
 	}
 
 	@Override
-	public boolean fight(String oponent) {;
+	public boolean fight(String oponent) {
 		int roll= Critter.getRandomInt(5);
 		if(oponent.equals("project4.Craig") && degree.equals("phd")){
 			return true;
@@ -61,6 +61,27 @@ public class Jeho extends Critter{
 		else{
 			return false; 
 		}
+	}
+	public static void runStats(java.util.List<Critter> Jehos) {
+		int bachelors =0;
+		int masters =0;
+		int phd =0;
+		for(Object obj: Jehos){
+			Jeho jeho = (Jeho) obj;
+			if((jeho.degree).equals("bachelors")){
+				bachelors++;
+			}
+			else if((jeho.degree).equals("masters")){
+				masters++;
+			}
+			else{
+				phd++;
+			}
+		}
+		System.out.println("There are " + bachelors + " Jeho(s) workong on their bachelors");
+		System.out.println("There are " + masters + " Jeho(s) working on their masters");
+		System.out.println("There are " + phd + " Jeho(s) working on their phd and can take down Craig");
+		
 	}
 
 }

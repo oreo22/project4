@@ -21,5 +21,10 @@ public class Margret extends Critter{
 		return true; //always fights
 	}
 
+	public static void runStats(java.util.List<Critter> Margrets) {
+		
+		System.out.println("There are " + Margrets.size() + " Margret(s) hunting down students");
+		
+	}
 
 }

@@ -40,5 +40,30 @@ public class Student extends Critter{
 	public String toString(){
 		return "S";
 	}
-
+	public static void runStats(java.util.List<Critter> Students) {
+		int A =0;
+		int B =0;
+		int C =0;
+		int failing =0;
+		for(Object obj: Students){
+			Student student = (Student) obj;
+			if(student.getEnergy() >= 90){
+				A++;
+			}
+			else if(student.getEnergy() >= 80){
+				B++;
+			}
+			else if (student.getEnergy() >= 70){
+				C++;
+			}
+			else{
+				failing++;
+			}
+		}
+		System.out.println("There are " + A + " student(s) with A's in this course");
+		System.out.println("There are " + B + " student(s) with B's in this course");
+		System.out.println("There are " + C + " student(s) with C's in this course");
+		System.out.println("There are " + failing + " student(s) failing this course and should drop");
+		
+	}
 }

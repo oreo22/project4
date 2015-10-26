@@ -32,5 +32,27 @@ public class Cassidy extends Critter {
 	public String toString(){
 		return "Ç";
 	}
+	
+	public static void runStats(java.util.List<Critter> cassidys) {
+		int cassidysAsleep =0;
+		int cassidysSmashing =0;
+		int cassidysInSchool =0;
+		for(Object obj: cassidys){
+			Cassidy cas = (Cassidy) obj;
+			if(cas.hours >= 0 && cas.hours<=8){
+				cassidysAsleep++;
+			}
+			else if((cas.hours >=10 && cas.hours<=14) || (cas.hours >=16 && cas.hours <= 20)){
+				cassidysSmashing++;
+			}
+			else{
+				cassidysInSchool++;
+			}
+		}
+		System.out.println("There are " + cassidysAsleep + " Cassidy(s) sleeping");
+		System.out.println("There are " + cassidysSmashing + " Cassidy(s) playing smash");
+		System.out.println("There are " + cassidysInSchool + " Cassidy(s) in school");
+		
+	}
 
 }
