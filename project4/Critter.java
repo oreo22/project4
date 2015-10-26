@@ -1,6 +1,9 @@
 package project4;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,18 +151,19 @@ public abstract class Critter{
 	}
 	
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-		List<Critter> result = new java.util.ArrayList<Critter>();
+		List<Critter> result = new ArrayList<Critter>();
+		try {
 		for(int x=0; x<CritterWorld.population.size(); x++){
-			try {
+	
 				if(Class.forName(critter_class_name).isInstance(CritterWorld.population.get(x))){
 					result.add(CritterWorld.population.get(x));
 				}
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
-		runStats(result);
+		
+		
+		} catch (ClassNotFoundException | IllegalArgumentException e) {
+			throw new InvalidCritterException(critter_class_name);
+		}
 		return result;
 	}
 	

@@ -1,4 +1,5 @@
 package project4;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -30,7 +31,8 @@ public static void main(String[] args) throws InvalidCritterException {
 					CritterWorld.displayWorld();
 				}
 				else if(commands.length == 2 && commands[0].equals("stats")){
-					Critter.getInstances(commands[1]);
+					Object obj = Class.forName(commands[1]).newInstance();
+					Class.forName(commands[1]).getMethod("runStats", List.class).invoke(obj, Critter.getInstances(commands[1]));
 				}
 				else if(commands.length == 2 && commands[0].equals("seed")){
 					Critter.setSeed(Long.parseLong(commands[1]));
