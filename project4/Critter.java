@@ -245,14 +245,16 @@ public abstract class Critter{
 						if(yFight){ yStrength = Critter.getRandomInt(Critter.population.get(y).energy);}
 						//if it's the same position, neither of them ran away successfully.
 						if(Critter.population.get(x).x_coord == Critter.population.get(y).x_coord && Critter.population.get(x).y_coord== Critter.population.get(y).y_coord){
-							if(xStrength>=yStrength){
+							if(xStrength>=yStrength && Critter.population.get(y).energy > 0){ //make sure y didnt die trying to run away
 								Critter.population.get(x).energy=(Critter.population.get(x).energy + Critter.population.get(y).energy/2);
 								Critter.population.get(y).energy=0;
 							}
-							else if(yStrength > xStrength){
+							else if(yStrength > xStrength && Critter.population.get(x).energy > 0){ //making sure x didnt die trying to run away
 								Critter.population.get(y).energy=(Critter.population.get(y).energy + Critter.population.get(x).energy/2);
 								Critter.population.get(x).energy=0;
 							}
+							//if they both tried to run away but they could not and they died because they ran out of energy, then nothing happens
+				
 						}
 					//solve for unsuccessful run away 
 					}
