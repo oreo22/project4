@@ -7,14 +7,12 @@ import java.util.Map;
 
 public class CritterWorld {
 
-static ArrayList<Critter> population=new ArrayList<Critter>();
 //static Map<int[],ArrayList<Integer> > grid=new HashMap<int[], ArrayList<Integer>>();
 //static Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
-static Map<Integer, Map<Integer, ArrayList<Integer> >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
+//Correct Map//static Map<Integer, Map<Integer, ArrayList<Integer> >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
 //static Map<Integer, ArrayList<Integer> > grid2=new HashMap<Integer, ArrayList<Integer> >();
 
-public static boolean fightPhase = false;
-private static String[][] critterWorld = new String[Params.world_width+2][Params.world_height+2];
+
 		
 /*static void updateGrid(){
 
@@ -70,7 +68,7 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 	}
 	
 	
-	private static void createWorld(){
+/*	private static void createWorld(){
 		//Top
 		critterWorld[0][0] = "+";
 		critterWorld[0][Params.world_width+1] = "+";
@@ -90,6 +88,6 @@ private static String[][] critterWorld = new String[Params.world_width+2][Params
 		for(int x=1; x<Params.world_width; x++){
 			critterWorld[Params.world_height+1][x] = "-";
 		}
-	}
+	}*/
 
 }

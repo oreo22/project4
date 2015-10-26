@@ -1,12 +1,7 @@
 package project4;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -18,6 +13,10 @@ public abstract class Critter{
 	private int y_coord;
 	private boolean move_flag;
 	private static java.util.Random rand = new java.util.Random();
+	private static ArrayList<Critter> population=new ArrayList<Critter>();
+	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	private static boolean fightPhase = false;
+	
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
 	}	
@@ -31,8 +30,8 @@ public abstract class Critter{
 	
 	
 	private boolean adjacentLocationOccupied(int x, int y){
-		for(int z=0; z<CritterWorld.population.size(); z++){
-			if(CritterWorld.population.get(z).x_coord == x && CritterWorld.population.get(z).y_coord == y){
+		for(int z=0; z<Critter.population.size(); z++){
+			if(Critter.population.get(z).x_coord == x && Critter.population.get(z).y_coord == y){
 				return true;
 			}
 		}
@@ -61,13 +60,13 @@ public abstract class Critter{
 	protected final void walk(int direction) {
 		if(this.move_flag == false){
 			int[] newCoord=findNewLocation(direction,1);
-			if(CritterWorld.fightPhase){
+			if(Critter.fightPhase){
 				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
 					x_coord=newCoord[0];
 					y_coord=newCoord[1];
 				}
 			}
-				 //different for fightstage and normal stages
+			//different for fightstage and normal stages
 			//only set newLocationIsOccupied if it's fightPhase
 			/*if(this location is occupied && CritterWorld.fightPhase==true ){
 			 * newLocationIsOccupied==true;
@@ -85,7 +84,7 @@ public abstract class Critter{
 	protected final void run(int direction) {
 		if(this.move_flag == false){
 			int[] newCoord=findNewLocation(direction,1);
-			if(CritterWorld.fightPhase){
+			if(Critter.fightPhase){
 				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
 					x_coord=newCoord[0];
 					y_coord=newCoord[1];
@@ -131,14 +130,14 @@ public abstract class Critter{
     		Critter newSpawn;
 				newSpawn = class_type.newInstance(); //calling the basic constructor for whatever Critter sub-type was given
 				newSpawn.energy=Params.start_energy;
-	    		newSpawn.x_coord=newSpawn.getRandomInt(Params.world_width);
-	    		newSpawn.y_coord=newSpawn.getRandomInt(Params.world_height);
+	    		newSpawn.x_coord=Critter.getRandomInt(Params.world_width);
+	    		newSpawn.y_coord=Critter.getRandomInt(Params.world_height);
 	    		if(critter_class_name == "project4.Project4TestCritter"){
 	    			newSpawn.x_coord =0;
 	    			newSpawn.y_coord =  3;
 	    		}
 	    		newSpawn.move_flag = false;
-	    		CritterWorld.population.add(newSpawn);
+	    		Critter.population.add(newSpawn);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				throw new InvalidCritterException(critter_class_name);
 			}
@@ -153,10 +152,10 @@ public abstract class Critter{
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new ArrayList<Critter>();
 		try {
-		for(int x=0; x<CritterWorld.population.size(); x++){
+		for(int x=0; x<Critter.population.size(); x++){
 	
-				if(Class.forName(critter_class_name).isInstance(CritterWorld.population.get(x))){
-					result.add(CritterWorld.population.get(x));
+				if(Class.forName(critter_class_name).isInstance(Critter.population.get(x))){
+					result.add(Critter.population.get(x));
 				}
 		}
 		
@@ -211,70 +210,70 @@ public abstract class Critter{
 		}
 	}
 	
-	public static List<Critter> babies = new java.util.ArrayList<Critter>();
+	
 
 	public static void worldTimeStep() {
-		for(int x=0; x<CritterWorld.population.size(); x++){
-			CritterWorld.population.get(x).move_flag = false;
-			CritterWorld.population.get(x).energy -= Params.rest_energy_cost;
-			CritterWorld.population.get(x).doTimeStep(); 
+		for(int x=0; x<Critter.population.size(); x++){
+			Critter.population.get(x).move_flag = false;
+			Critter.population.get(x).energy -= Params.rest_energy_cost;
+			Critter.population.get(x).doTimeStep(); 
 		}
-		updateGrid();
+		//updateGrid();//For map implementation
 		handleEncounters();
 		killCritters();
 		populatebabies();
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
-			newAlgae.x_coord=newAlgae.getRandomInt(Params.world_width);
-    		newAlgae.y_coord=newAlgae.getRandomInt(Params.world_height);
-    		CritterWorld.population.add(newAlgae);
+			newAlgae.x_coord=Critter.getRandomInt(Params.world_width);
+    		newAlgae.y_coord=Critter.getRandomInt(Params.world_height);
+    		Critter.population.add(newAlgae);
 		}
 	}
 //------------Critter World Time Step Methods----------	
 	//-------Fighting-------
-	static void handleEncounters(){
-		CritterWorld.fightPhase = true;
-		for(int y=0; y<CritterWorld.population.size(); y++){
-				for(int x=y+1; x<CritterWorld.population.size(); x++){
-					if(CritterWorld.population.get(y).energy> 0 && CritterWorld.population.get(x).energy > 0 && CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
+	private static void handleEncounters(){
+		Critter.fightPhase = true;
+		for(int y=0; y<Critter.population.size(); y++){
+				for(int x=y+1; x<Critter.population.size(); x++){
+					if(Critter.population.get(y).energy> 0 && Critter.population.get(x).energy > 0 && Critter.population.get(x).x_coord == Critter.population.get(y).x_coord && Critter.population.get(x).y_coord== Critter.population.get(y).y_coord){
 						int xStrength = 0;
 						int yStrength = 0;
-						boolean xFight = CritterWorld.population.get(x).fight(CritterWorld.population.get(y).getClass().getName());
-						boolean yFight = CritterWorld.population.get(y).fight(CritterWorld.population.get(x).getClass().getName());
-						if(xFight){ xStrength = Critter.getRandomInt(CritterWorld.population.get(x).energy);}
-						if(yFight){ yStrength = Critter.getRandomInt(CritterWorld.population.get(y).energy);}
+						boolean xFight = Critter.population.get(x).fight(Critter.population.get(y).getClass().getName());
+						boolean yFight = Critter.population.get(y).fight(Critter.population.get(x).getClass().getName());
+						if(xFight){ xStrength = Critter.getRandomInt(Critter.population.get(x).energy);}
+						if(yFight){ yStrength = Critter.getRandomInt(Critter.population.get(y).energy);}
 						//if it's the same position, neither of them ran away successfully.
-						if(CritterWorld.population.get(x).x_coord == CritterWorld.population.get(y).x_coord && CritterWorld.population.get(x).y_coord== CritterWorld.population.get(y).y_coord){
+						if(Critter.population.get(x).x_coord == Critter.population.get(y).x_coord && Critter.population.get(x).y_coord== Critter.population.get(y).y_coord){
 							if(xStrength>=yStrength){
-								CritterWorld.population.get(x).energy=(CritterWorld.population.get(x).energy + CritterWorld.population.get(y).energy/2);
-								CritterWorld.population.get(y).energy=0;
+								Critter.population.get(x).energy=(Critter.population.get(x).energy + Critter.population.get(y).energy/2);
+								Critter.population.get(y).energy=0;
 							}
 							else if(yStrength > xStrength){
-								CritterWorld.population.get(y).energy=(CritterWorld.population.get(y).energy + CritterWorld.population.get(x).energy/2);
-								CritterWorld.population.get(x).energy=0;
+								Critter.population.get(y).energy=(Critter.population.get(y).energy + Critter.population.get(x).energy/2);
+								Critter.population.get(x).energy=0;
 							}
 						}
 					//solve for unsuccessful run away 
 					}
 				}
 		}
-		CritterWorld.fightPhase = false;
+		Critter.fightPhase = false;
 	}
 	//--------------Killing Critters----------
-	static void killCritters(){
-		for(int x=0; x<CritterWorld.population.size(); x++){
-			if(CritterWorld.population.get(x).energy <= 0){
-				CritterWorld.population.remove(x--);
+	private static void killCritters(){
+		for(int x=0; x<Critter.population.size(); x++){
+			if(Critter.population.get(x).energy <= 0){
+				Critter.population.remove(x--);
 			}
 		}
 	}
 
 	
 	//----Reproduction-----
-	static void populatebabies() {
+	private static void populatebabies() {
 		for(int x=0; x<Critter.babies.size();x++){
-			CritterWorld.population.add(Critter.babies.get(x));
+			Critter.population.add(Critter.babies.get(x));
 		}
 		
 		Critter.babies = new ArrayList<Critter>();	
@@ -292,9 +291,9 @@ public abstract class Critter{
 					output=population.get(index).toString();
 				}*/
 				
-				for(int c=0; c<CritterWorld.population.size(); c++){
-					if(CritterWorld.population.get(c).x_coord==x && CritterWorld.population.get(c).y_coord==y){
-						output = CritterWorld.population.get(c).toString();
+				for(int c=0; c<Critter.population.size(); c++){
+					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
+						output = Critter.population.get(c).toString();
 						break;
 					}
 				}
@@ -305,13 +304,13 @@ public abstract class Critter{
 		}
 	}
 
-	static void updateGrid(){
+/*	static void updateGrid(){
 		for(int y=0; y<Params.world_height; y++){
 			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
 			for(int x=0; x<Params.world_width; x++){ 
 				ArrayList<Integer> occupants=new ArrayList<Integer>();
-				for(int c=0; c<CritterWorld.population.size(); c++){
-					if(CritterWorld.population.get(c).x_coord==x && CritterWorld.population.get(c).y_coord==y){
+				for(int c=0; c<Critter.population.size(); c++){
+					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
 						occupants.add(c); //add this index
 					}
 				}
@@ -319,7 +318,7 @@ public abstract class Critter{
 			}
 			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position			
 		} 
-	}
+	}*/
 }
 
 
