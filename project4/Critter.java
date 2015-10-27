@@ -109,12 +109,12 @@ public abstract class Critter{
 		if(this.energy <= Params.min_reproduce_energy){
 			return;
 		}
-			this.energy /= 2;
-			offspring.energy = this.energy + Params.walk_energy_cost;
+			offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
 			offspring.x_coord = offspring.x_coord;
 			offspring.y_coord = offspring.y_coord;
 			offspring.walk(direction);
 			babies.add(offspring);
+			this.energy = (int) Math.ceil(this.energy/2);
 	}
 
 	public abstract void doTimeStep();
