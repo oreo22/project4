@@ -2,6 +2,13 @@ package project4;
 /* Diego Guerra (dag3222) 
  * Oriana Wong (oyw58)
  */
+
+/*Description: Margret is Margret.
+ *doTimeStep: Margret runs in random directions if the dice roll is 0. Otherwise, they do nothing
+ * Fight: Margret fights Craig if the dice roll is 0 or 1. 
+ * Otherwise, they fight everyone.
+ * Stats: The stats tell you how many Margrets there are in the world. 
+ */
 public class Margret extends Critter{
 	public String toString() { return "M"; }
 
