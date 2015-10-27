@@ -1,7 +1,9 @@
 package project4;
 import java.util.List;
 import java.util.Scanner;
-
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 public class Main {
 
 	

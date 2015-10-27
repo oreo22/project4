@@ -1,5 +1,17 @@
 package project4;
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 
+/*Description: Jeho are critters that have different characteristics based on their degree.
+ * Jeho starts out with a masters degree. Based on his energy, he can lose his degrees or gain more.
+ * doTimeStep:Jeho are assigned a degree based on their energy. The higher the energy level, the higher degree. 
+ * Based on a dice roll, Jeho can either run or walk in a random direction. Otherwise, they can reproduce. 
+ * Fight: Jeho can fight Craig, TA's, and students if they are at a PHD level. At Masters level, they can fight the other TA's (Cassidy and Margret) and students
+ * Otherwise, at Bachelors, they can only fight students if their dice roll is at least 3. Otherwise, they reproduce and walk away.
+ * Jeho always fights Algae.
+ * Stats: The stats tell you how many Jeho of each type of degree are in the world. 
+ */
 public class Jeho extends Critter{
 	private String degree;
 	
@@ -41,7 +53,7 @@ public class Jeho extends Critter{
 		if(oponent.equals("project4.Craig") && degree.equals("phd")){
 			return true;
 		}
-		else if((oponent.equals("project4.Cassidy") || oponent.equals("project4.Margret")) && degree.equals("masters")){
+		else if((oponent.equals("project4.Cassidy") || oponent.equals("project4.Margret")) && (degree.equals("masters") || degree.equals("phd")) ){
 			return true;
 		}
 		else if(oponent.equals("project4.Student")){

@@ -1,5 +1,7 @@
 package project4;
-
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

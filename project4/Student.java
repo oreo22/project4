@@ -1,5 +1,18 @@
 package project4;
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 
+/*Description: Students are critters that have different characteristics based on their "grade" or energy
+ * doTimeStep: Student just walks in a random direction based on its energy. 
+ * If they're an A student though, they can reproduce. Cause we need as many A students we can get.
+ * Fight: Students can't fight Craig. Otherwise:
+ * If they're an A student, they're always fighting everything else besides Craig. 
+ * If they're a B student, they fight half the time.
+ * If they're a C student, they sometimes take the chance to fight. 
+ * Otherwise, they don't fight....well except Algae. They always fight Algae.
+ * Stats: The stats tell you how many students of each grade type in the world.
+ */
 public class Student extends Critter{
 
 	@Override

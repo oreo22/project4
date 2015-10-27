@@ -1,5 +1,7 @@
 package project4;
-
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 import project4.Critter.TestCritter;
 
 public class Algae extends TestCritter {

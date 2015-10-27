@@ -1,5 +1,7 @@
 package project4;
-
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 public class Params {
 	public final static int world_width = 16;
 	public final static int world_height = 8;

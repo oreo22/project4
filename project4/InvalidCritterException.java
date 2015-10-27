@@ -1,5 +1,7 @@
 package project4;
-
+/* Diego Guerra (dag3222) 
+ * Oriana Wong (oyw58)
+ */
 public class InvalidCritterException extends Exception {
 	String offending_class;
 	
