@@ -2,7 +2,14 @@ package project4;
 /* Diego Guerra (dag3222) 
  * Oriana Wong (oyw58)
  */
-
+/*Description: Cassidy has characteristics based his hour of the day since inception
+ * doTimeStep: Cassidy will walk twice depending on the hour of the day
+ * If it's night time for a Cassidy, he will reproduce. Night hours are from 0 to 8 military time
+ * Fight: Cassidy can't fight Craig. Otherwise:
+ * If Cassidy is in his usual Smash Hours, 10 to 14 and 16 to 20, then he will always fight
+ * Otherwise, he is in class and can't fight. If it is an Algae, he can take a snack break during class and eat
+ * Stats: The stats tell you what the each Cassidy is doing
+ */
 public class Cassidy extends Critter {
 	private int hours;
 
