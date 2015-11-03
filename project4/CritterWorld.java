@@ -9,10 +9,9 @@ import java.util.Map;
 
 public class CritterWorld {
 
-//static Map<int[],ArrayList<Integer> > grid=new HashMap<int[], ArrayList<Integer>>();
-//static Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
-//Correct Map//static Map<Integer, Map<Integer, ArrayList<Integer> >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
-//static Map<Integer, ArrayList<Integer> > grid2=new HashMap<Integer, ArrayList<Integer> >();
+//Correct Map//
+static Map<Integer, Map<Integer, ArrayList<Integer>  >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
+static Map<Integer, ArrayList<Integer> > xKeys = new HashMap <Integer, ArrayList<Integer> >(Params.world_width);
 
 
 		

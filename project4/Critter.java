@@ -3,12 +3,18 @@ package project4;
  * Oriana Wong (oyw58)
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
  */
+
+//Two problems: random -1's in the map after we leave step method
+//Map malfunctions if you step more than once?
+//reproduce, the babies aren't in population yet, so how do we put them on our map?
 public abstract class Critter{
 	private int energy = 0;	
 	private int x_coord;
@@ -16,6 +22,7 @@ public abstract class Critter{
 	private boolean move_flag;
 	private static java.util.Random rand = new java.util.Random();
 	private static ArrayList<Critter> population=new ArrayList<Critter>();
+	private static Map<Integer, Map<Integer, ArrayList<Integer>  >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static boolean fightPhase = false;
 	
@@ -64,8 +71,10 @@ public abstract class Critter{
 			int[] newCoord=findNewLocation(direction,1);
 			if(Critter.fightPhase){
 				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
+					grid1.get(this.y_coord).get(this.x_coord).remove(population.indexOf(this));
 					x_coord=newCoord[0];
 					y_coord=newCoord[1];
+					grid1.get(this.y_coord).get(this.x_coord).add(population.indexOf(this));
 				}
 			}
 			//different for fightstage and normal stages
@@ -75,8 +84,10 @@ public abstract class Critter{
 				}*/
 			
 			else{
+				grid1.get(this.y_coord).get(this.x_coord).remove(population.indexOf(this));
 				x_coord=newCoord[0];
 				y_coord=newCoord[1];
+				grid1.get(this.y_coord).get(this.x_coord).add(population.indexOf(this));
 			}
 			
 			move_flag=true; //it walked!
@@ -88,8 +99,10 @@ public abstract class Critter{
 			int[] newCoord=findNewLocation(direction,1);
 			if(Critter.fightPhase){
 				if(!adjacentLocationOccupied(newCoord[0], newCoord[1])){
+					grid1.get(this.y_coord).get(this.x_coord).remove(population.indexOf(this));
 					x_coord=newCoord[0];
 					y_coord=newCoord[1];
+					grid1.get(this.y_coord).get(this.x_coord).add(population.indexOf(this));
 				}
 			}
 				 //different for fightstage and normal stages
@@ -99,8 +112,10 @@ public abstract class Critter{
 				}*/
 			
 			else{
+				grid1.get(this.y_coord).get(this.x_coord).remove(population.indexOf(this));
 				x_coord=newCoord[0];
 				y_coord=newCoord[1];
+				grid1.get(this.y_coord).get(this.x_coord).add(population.indexOf(this));
 			}
 			
 			move_flag=true; //it walked!
@@ -114,6 +129,7 @@ public abstract class Critter{
 			offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
 			offspring.x_coord = offspring.x_coord;
 			offspring.y_coord = offspring.y_coord;
+			grid1.get(offspring.y_coord).get(offspring.x_coord).add(population.indexOf(offspring));
 			offspring.walk(direction);
 			babies.add(offspring);
 			this.energy = (int) Math.ceil(this.energy/2);
@@ -134,12 +150,13 @@ public abstract class Critter{
 				newSpawn.energy=Params.start_energy;
 	    		newSpawn.x_coord=Critter.getRandomInt(Params.world_width);
 	    		newSpawn.y_coord=Critter.getRandomInt(Params.world_height);
-	    		if(critter_class_name == "project4.Project4TestCritter"){
+	    		if(critter_class_name == "project4.Project4TestCritter"){ //do we still need this?
 	    			newSpawn.x_coord =0;
 	    			newSpawn.y_coord =  3;
 	    		}
 	    		newSpawn.move_flag = false;
 	    		Critter.population.add(newSpawn);
+	    		grid1.get(newSpawn.y_coord).get(newSpawn.x_coord).add(population.indexOf(newSpawn));
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				throw new InvalidCritterException(critter_class_name);
 			}
@@ -204,7 +221,7 @@ public abstract class Critter{
 		}
 		
 		protected void setXCoord(int new_x_coord) {
-			super.x_coord = new_x_coord;
+			super.x_coord = new_x_coord; //should we change the grid stuff here?
 		}
 		
 		protected void setYCoord(int new_y_coord) {
@@ -224,12 +241,17 @@ public abstract class Critter{
 		handleEncounters();
 		killCritters();
 		populatebabies();
+		//updateGrid();//For map implementation
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
 			newAlgae.x_coord=Critter.getRandomInt(Params.world_width);
-    		newAlgae.y_coord=Critter.getRandomInt(Params.world_height);
+		
+			grid1.get(newAlgae.y_coord).get(newAlgae.x_coord).add(Critter.population.indexOf(newAlgae));
+			newAlgae.y_coord=Critter.getRandomInt(Params.world_height);
     		Critter.population.add(newAlgae);
+    		grid1.get(newAlgae.y_coord).get(newAlgae.x_coord).add(population.indexOf(newAlgae));
+
 		}
 	}
 //------------Critter World Time Step Methods----------	
@@ -269,6 +291,7 @@ public abstract class Critter{
 		for(int x=0; x<Critter.population.size(); x++){
 			if(Critter.population.get(x).energy <= 0){
 				Critter.population.remove(x--);
+				grid1.get(population.get(x).y_coord).get(population.get(x).x_coord).remove(population.get(x));
 			}
 		}
 	}
@@ -278,6 +301,8 @@ public abstract class Critter{
 	private static void populatebabies() {
 		for(int x=0; x<Critter.babies.size();x++){
 			Critter.population.add(Critter.babies.get(x));
+			grid1.get(Critter.babies.get(x).y_coord).get(Critter.babies.get(x).x_coord).add(population.indexOf(Critter.babies.get(x)));
+			//not sure about this line of code
 		}
 		
 		Critter.babies = new ArrayList<Critter>();	
@@ -290,17 +315,18 @@ public abstract class Critter{
 			System.out.print("|");
 			for(int x=0; x<Params.world_width; x++){ 
 				String output = " ";
-				/*if(grid.get(y).get(x)!=0){
-					int index=grid.get(y).get(x);
-					output=population.get(index).toString();
-				}*/
-				
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
+						ArrayList<Integer> temp=grid1.get(y).get(x);
+						if(temp.size()>0 && temp.get(0)!=-1){
+							output=population.get(temp.get(0)).toString();
+						}
+						
+					
+					/*for(int c=0; c<Critter.population.size(); c++){
+					 * if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
 						output = Critter.population.get(c).toString();
 						break;
-					}
-				}
+						}
+					}*/
 				System.out.print(output);
 			}
 			System.out.print("|");
@@ -308,7 +334,7 @@ public abstract class Critter{
 		}
 	}
 
-/*	static void updateGrid(){
+	static void updateGrid(){
 		for(int y=0; y<Params.world_height; y++){
 			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
 			for(int x=0; x<Params.world_width; x++){ 
@@ -320,22 +346,8 @@ public abstract class Critter{
 				}
 				xKeys.put(x,occupants); //make a bunch of x keys to arrays of indexes
 			}
-			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position			
+			grid1.put( y, xKeys); //put the xkeys at that y position			
 		} 
-	}*/
+	}
 }
 
-
-//----Unused code-----
-/*switch (direction){
-case 0: if(y_coord == 0){ y_coord = Params.world_height-1;}else{y_coord = (y_coord-1)%Params.world_height;}			  break;
-case 1: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-case 2: x_coord=(x_coord+1)%Params.world_width;		  break;
-case 3: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord+1)%Params.world_height; break;
-case 4: y_coord=(y_coord+1)%Params.world_height; 			  break;
-case 5: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} 
-		y_coord=(y_coord+1)%Params.world_height; break; //what if it is at 0
-case 6: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} break;
-case 7: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-default: System.out.println("Invalid direction. Try again."); break;
-}*/
