@@ -240,17 +240,13 @@ public abstract class Critter{
 			Critter.population.get(x).energy -= Params.rest_energy_cost;
 			Critter.population.get(x).doTimeStep(); 
 		}
-		//makeGrid();//For map implementation
 		handleEncounters();
 		killCritters();
 		populatebabies();
-		//makeGrid();//For map implementation
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
 			newAlgae.x_coord=Critter.getRandomInt(Params.world_width);
-		
-			grid1.get(newAlgae.y_coord).get(newAlgae.x_coord).add(Critter.population.indexOf(newAlgae));
 			newAlgae.y_coord=Critter.getRandomInt(Params.world_height);
     		Critter.population.add(newAlgae);
     		grid1.get(newAlgae.y_coord).get(newAlgae.x_coord).add(population.indexOf(newAlgae));
@@ -294,9 +290,12 @@ public abstract class Critter{
 	private static void killCritters(){
 		for(int x=0; x<Critter.population.size(); x++){
 			if(Critter.population.get(x).energy <= 0){
+				Integer remove_object=x;
+				boolean removed=grid1.get(population.get(x).y_coord).get(population.get(x).x_coord).remove(remove_object); //how do i make it remove the object?
+				System.out.print(removed);
+				//want it to remove the value, 9, but it thinks it's an index
 				Critter.population.remove(x--);
-				grid1.get(population.get(x).y_coord).get(population.get(x).x_coord).remove(population.get(x));
-			}
+				}
 		}
 	}
 
@@ -320,7 +319,7 @@ public abstract class Critter{
 			for(int x=0; x<Params.world_width; x++){ 
 				String output = " ";
 						ArrayList<Integer> temp=grid1.get(y).get(x);
-						if(temp.size()>0 && temp.get(0)!=-1){
+						if(temp.size()>0 ){//&& temp.get(0)!=-1
 							output=population.get(temp.get(0)).toString();
 						}
 						

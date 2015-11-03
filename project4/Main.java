@@ -63,6 +63,8 @@ public static void main(String[] args) throws InvalidCritterException {
 				else{ invalidCommand(commandLine);}
 			}catch(Throwable x){;
 			System.out.println("error processing: " + commandLine);
+			System.out.println(x);
+			System.out.println(x.getMessage());
 			}
 			
 	}
