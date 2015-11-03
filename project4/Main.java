@@ -15,7 +15,7 @@ public static void main(String[] args) throws InvalidCritterException {
 		//System.out.println("GLHF");
 		Scanner game=new Scanner(System.in); //do we need to read from file or keyboard
 		//CritterWorld.makeWorld();
-		Critter.updateGrid();
+		Critter.makeGrid();
 //---------Controller------------------------	
 		outerloop:
 			while(true){

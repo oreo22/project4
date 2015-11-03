@@ -41,6 +41,7 @@ public abstract class Critter{
 	private boolean adjacentLocationOccupied(int x, int y){
 		for(int z=0; z<Critter.population.size(); z++){
 			if(Critter.population.get(z).x_coord == x && Critter.population.get(z).y_coord == y){
+			//GRID FIX
 				return true;
 			}
 		}
@@ -129,6 +130,7 @@ public abstract class Critter{
 			offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
 			offspring.x_coord = offspring.x_coord;
 			offspring.y_coord = offspring.y_coord;
+			//GRID FIX, BUT PROB! CAN'T USE POPULATION
 			grid1.get(offspring.y_coord).get(offspring.x_coord).add(population.indexOf(offspring));
 			offspring.walk(direction);
 			babies.add(offspring);
@@ -222,6 +224,7 @@ public abstract class Critter{
 		
 		protected void setXCoord(int new_x_coord) {
 			super.x_coord = new_x_coord; //should we change the grid stuff here?
+			//GRID FIX?
 		}
 		
 		protected void setYCoord(int new_y_coord) {
@@ -237,11 +240,11 @@ public abstract class Critter{
 			Critter.population.get(x).energy -= Params.rest_energy_cost;
 			Critter.population.get(x).doTimeStep(); 
 		}
-		//updateGrid();//For map implementation
+		//makeGrid();//For map implementation
 		handleEncounters();
 		killCritters();
 		populatebabies();
-		//updateGrid();//For map implementation
+		//makeGrid();//For map implementation
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
@@ -257,6 +260,7 @@ public abstract class Critter{
 //------------Critter World Time Step Methods----------	
 	//-------Fighting-------
 	private static void handleEncounters(){
+		//GRID FIX
 		Critter.fightPhase = true;
 		for(int y=0; y<Critter.population.size(); y++){
 				for(int x=y+1; x<Critter.population.size(); x++){
@@ -334,7 +338,7 @@ public abstract class Critter{
 		}
 	}
 
-	static void updateGrid(){
+	static void makeGrid(){
 		for(int y=0; y<Params.world_height; y++){
 			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
 			for(int x=0; x<Params.world_width; x++){ 
