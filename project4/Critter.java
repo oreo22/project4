@@ -20,6 +20,7 @@ public abstract class Critter{
 	private int x_coord;
 	private int y_coord;
 	private boolean move_flag;
+	private boolean notInPopulFlag;
 	private static java.util.Random rand = new java.util.Random();
 	private static ArrayList<Critter> population=new ArrayList<Critter>();
 	private static Map<Integer, Map<Integer, ArrayList<Integer>  >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
@@ -83,7 +84,10 @@ public abstract class Critter{
 			/*if(this location is occupied && CritterWorld.fightPhase==true ){
 			 * newLocationIsOccupied==true;
 				}*/
-			
+			else if(notInPopulFlag){
+				x_coord=newCoord[0];
+				y_coord=newCoord[1];
+			}
 			else{
 				grid1.get(this.y_coord).get(this.x_coord).remove(population.indexOf(this));
 				x_coord=newCoord[0];
@@ -130,11 +134,11 @@ public abstract class Critter{
 			offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
 			offspring.x_coord = offspring.x_coord;
 			offspring.y_coord = offspring.y_coord;
-			//GRID FIX, BUT PROB! CAN'T USE POPULATION
-			grid1.get(offspring.y_coord).get(offspring.x_coord).add(population.indexOf(offspring));
+			notInPopulFlag=true;
 			offspring.walk(direction);
 			babies.add(offspring);
 			this.energy = (int) Math.ceil(this.energy/2);
+			notInPopulFlag=false;
 	}
 
 	public abstract void doTimeStep();
@@ -243,6 +247,7 @@ public abstract class Critter{
 		handleEncounters();
 		killCritters();
 		populatebabies();
+		makeGrid();
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
@@ -292,9 +297,9 @@ public abstract class Critter{
 			if(Critter.population.get(x).energy <= 0){
 				Integer remove_object=x;
 				boolean removed=grid1.get(population.get(x).y_coord).get(population.get(x).x_coord).remove(remove_object); //how do i make it remove the object?
-				System.out.print(removed);
-				//want it to remove the value, 9, but it thinks it's an index
+				System.out.println(removed);
 				Critter.population.remove(x--);
+				//how do we account for this in our grid?
 				}
 		}
 	}
