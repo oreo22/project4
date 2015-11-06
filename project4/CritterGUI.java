@@ -17,8 +17,9 @@
 	import javafx.scene.text.FontWeight;
 	import javafx.scene.text.Text;
 	import javafx.stage.Stage;
-public class CritterGUI {
+public class CritterGUI extends Application{
 
+	
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
 			
@@ -29,13 +30,12 @@ public class CritterGUI {
 		screen.setHgap(Params.world_height); //sets the height
 		screen.setVgap(Params.world_width); //sets the width? 
 		screen.setPadding(new Insets(25, 25, 25, 25)); 
-		     
 		
-		      //Scene scene = new Scene(screen, 500, 500); //the whole window
 		primaryStage.setWidth(Params.world_width*2);
 		primaryStage.setHeight(Params.world_height*2);
 		primaryStage.show();
 	}
+	
 /* private void clear(Canvas canvas) {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	gc.setFill(Color.WHITE);
