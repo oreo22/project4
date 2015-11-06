@@ -4,44 +4,104 @@
 	import javafx.event.EventHandler;
 	import javafx.geometry.Insets;
 	import javafx.geometry.Pos;
-	import javafx.scene.Parent;
+import javafx.scene.Group;
+import javafx.scene.Parent;
 	import javafx.scene.Scene;
-	import javafx.scene.control.Button;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 	import javafx.scene.control.Label;
 	import javafx.scene.control.PasswordField;
 	import javafx.scene.control.TextField;
 	import javafx.scene.layout.GridPane;
 	import javafx.scene.layout.HBox;
-	import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 	import javafx.scene.text.Font;
 	import javafx.scene.text.FontWeight;
 	import javafx.scene.text.Text;
 	import javafx.stage.Stage;
 	import javafx.scene.shape.*;
 public class CritterGUI extends Application{
+	   class ResizableCanvas extends Canvas {
 
+	        public ResizableCanvas() {
+	            // Redraw canvas when size changes.
+	            widthProperty().addListener(evt -> draw());
+	            heightProperty().addListener(evt -> draw());
+	        }
+
+	        private void draw() {
+	            double width = getWidth();
+	            double height = getHeight();
+
+	            GraphicsContext gc = getGraphicsContext2D();
+	            gc.clearRect(0, 0, width, height);
+	           
+	            for(int y=0; y<Params.world_height; y++){
+	    			for(int x=0; x<Params.world_width; x++){
+	    				gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*4)), (height/(Params.world_height*3)));
+	    			}
+	    		}
+	        }
+
+	        @Override
+	        public boolean isResizable() {
+	            return true;
+	        }
+
+	        @Override
+	        public double prefWidth(double height) {
+	            return getWidth();
+	        }
+
+	        @Override
+	        public double prefHeight(double width) {
+	            return getHeight();
+	        }
+	    }
 	
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
-			
-		GridPane grid = new GridPane(); //makes the user-interactive part
-		        //smaller part of the scene
-		        //Other panes exist
-		grid.setAlignment(Pos.CENTER_LEFT);
-		grid.setHgap(20);
-		grid.setVgap(20);
-		grid.setPrefSize(20, 20);
-		primaryStage.setWidth(Params.world_width*5);
-		primaryStage.setHeight(Params.world_height*5);
+		ResizableCanvas canvas = new ResizableCanvas();
 		
-		grid.setGridLinesVisible(true);
-		//screen.getChildren().get(0).setStyle("-fx-background-color: cornsilk; -fx-alignment: center;");
-		Scene scene = new Scene(grid, 300, 275);
-		grid.add(new Circle(5), 0, 0);
-		grid.add(new Circle(5), 5, 0);
-		grid.add(new Circle(5), 15, 2);
+		StackPane stackPane = new StackPane();
+		stackPane.getChildren().add(canvas);
+		Scene s = new Scene(stackPane, 500, 500, Color.WHITE);
 		
-		primaryStage.setScene(scene);
+		canvas.widthProperty().bind(stackPane.widthProperty());
+		canvas.heightProperty().bind(stackPane.heightProperty());
+		
+		
+	
+      
+        //NumberBinding rectsAreaSize = Bindings.min(stackPane.heightProperty(), stackPane.heightProperty());
+/*        for(int y=0; y<Params.world_height; y++){
+        	for(int x=0; x<Params.world_width; x++ ){
+        		Rectangle rectangle = new Rectangle();
+        		rectangle.setStroke(Color.BLACK);
+        		rectangle.setFill(Color.WHITE);
+        		
+        		//binding rectangle positions to pane size
+        		rectangle.xProperty().bind(rectsAreaSize.multiply(x).divide(Params.world_width));
+                rectangle.yProperty().bind(rectsAreaSize.multiply(y).divide(Params.world_height));
+
+                // here we bind rectangle size to pane size 
+                rectangle.heightProperty().bind(rectsAreaSize.divide(Params.world_height));
+                rectangle.widthProperty().bind(rectsAreaSize.divide(Params.world_height));
+
+                root.getChildren().add(rectangle);
+        	}*/
+		//root.getChildren().add(canvas);
+
+        stackPane.setPadding(new Insets(10,10,10,10));
+        StackPane.setAlignment(canvas, Pos.CENTER_LEFT);
+        
+		primaryStage.setScene(s);
+		
+		primaryStage.setWidth(1000);
+		primaryStage.setHeight(700);
 		primaryStage.show();
 	}
 	
@@ -51,5 +111,5 @@ public class CritterGUI extends Application{
 	gc.fillRect(0,  0,  canvas.getWidth(), canvas.getHeight());
 }*/
 
-
 }
+
