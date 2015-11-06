@@ -246,8 +246,8 @@ public abstract class Critter{
 		}
 		handleEncounters();
 		killCritters();
-		populatebabies();
 		makeGrid();
+		populatebabies();
 		for(int x=0; x<Params.refresh_algae_count;x++){
 			Critter newAlgae = new Algae();
 			newAlgae.energy = Params.start_energy;
@@ -295,9 +295,9 @@ public abstract class Critter{
 	private static void killCritters(){
 		for(int x=0; x<Critter.population.size(); x++){
 			if(Critter.population.get(x).energy <= 0){
-				Integer remove_object=x;
+				/*Integer remove_object=x;
 				boolean removed=grid1.get(population.get(x).y_coord).get(population.get(x).x_coord).remove(remove_object); //how do i make it remove the object?
-				System.out.println(removed);
+				System.out.println(removed);*/
 				Critter.population.remove(x--);
 				//how do we account for this in our grid?
 				}

@@ -19,7 +19,7 @@ public static void main(String[] args) throws InvalidCritterException {
 //---------Controller------------------------	
 		outerloop:
 			while(true){
-			
+			//CritterGUI.start();
 //---------Receiving input-------------------
 			System.out.print("critters>");
 			String commandLine=game.nextLine();
