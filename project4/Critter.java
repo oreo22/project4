@@ -19,6 +19,8 @@ public abstract class Critter{
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static boolean fightPhase = false;
 	
+	
+	
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
 	}	

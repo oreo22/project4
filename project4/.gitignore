@@ -3,6 +3,7 @@
 /Cassidy.class
 /Student.class
 /CritterGUI.class
+<<<<<<< HEAD
 /CritterGUI$1.class
 /CritterGUI$2.class
 /CritterGUI$1$1.class
@@ -13,3 +14,15 @@
 /CritterGUI$7.class
 /CritterGUI$8.class
 /CritterGUI$3$1.class
+=======
+/Algae.class
+/Craig.class
+/Critter$TestCritter.class
+/Critter.class
+/CritterWorld.class
+/InvalidCritterException.class
+/Main.class
+/Params.class
+/CritterGUI$1.class
+/CritterGUI$ResizableCanvas.class
+>>>>>>> refs/remotes/origin/Canvas

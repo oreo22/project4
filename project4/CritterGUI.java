@@ -1,32 +1,74 @@
-	package project4;
-	import javafx.util.StringConverter;
+package project4;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+	import javafx.event.ActionEvent;
 	import javafx.event.EventHandler;
 	import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
+	import javafx.geometry.Orientation;
+	import javafx.geometry.Pos;
+	import javafx.scene.Group;
 	import javafx.scene.Parent;
 	import javafx.scene.Scene;
 	import javafx.scene.canvas.Canvas;
 	import javafx.scene.canvas.GraphicsContext;
+	import javafx.scene.shape.*;
 	import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Slider;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
+	import javafx.scene.control.ComboBox;
+	import javafx.scene.control.Slider;
+	import javafx.scene.control.Label;
+	import javafx.scene.control.PasswordField;
+	import javafx.scene.control.TextField;
+	import javafx.scene.layout.Pane;
+	import javafx.scene.layout.GridPane;
+	import javafx.scene.layout.HBox;
+	import javafx.scene.layout.StackPane;
+	import javafx.scene.layout.FlowPane;
 	import javafx.scene.paint.Color;
 	import javafx.scene.text.Font;
 	import javafx.scene.text.FontWeight;
 	import javafx.scene.text.Text;
 	import javafx.stage.Stage;
-	import javafx.scene.Group;
-	import javafx.scene.shape.*;
-public class CritterGUI extends Application{
+	import javafx.util.StringConverter;
+	import javafx.collections.FXCollections;
+	import javafx.collections.ObservableList;  
 
+public class CritterGUI extends Application{
+	   class ResizableCanvas extends Canvas {
+		   public ResizableCanvas() {
+	            // Redraw canvas when size changes.
+	            widthProperty().addListener(evt -> draw());
+	            heightProperty().addListener(evt -> draw());
+	        }
+
+	        private void draw() {
+	            double width = getWidth();
+	            double height = getHeight();
+
+	            GraphicsContext gc = getGraphicsContext2D();
+	            gc.clearRect(0, 0, width, height);
+	           
+	            for(int y=0; y<Params.world_height; y++){
+	    			for(int x=0; x<Params.world_width; x++){
+	    				gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*4)), (height/(Params.world_height*3)));
+	    			}
+	    		}
+	        }
+
+	        @Override
+	        public boolean isResizable() {
+	            return true;
+	        }
+
+	        @Override
+	        public double prefWidth(double height) {
+	            return getWidth();
+	        }
+
+	        @Override
+	        public double prefHeight(double width) {
+	            return getHeight();
+	        }
+	    }
 
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
@@ -36,30 +78,49 @@ public class CritterGUI extends Application{
 		Group root = new Group();
 		Scene s = new Scene(root, height, width, Color.WHITE);
 
-		//------where the grid will be-------
-		final Canvas canvas = new Canvas(250,250);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setFill(Color.LIGHTCYAN);
-		gc.fillRect(30, 30, 500, 500);
-		///------DELETE AND REPLACE WITH GRID STUFF------
-
+		//------Grid of Critters-------
+		ResizableCanvas canvas = new ResizableCanvas();
+		StackPane stackPane = new StackPane();
+		canvas.widthProperty().bind(stackPane.widthProperty());
+		canvas.heightProperty().bind(stackPane.heightProperty());
 		
+        //NumberBinding rectsAreaSize = Bindings.min(stackPane.heightProperty(), stackPane.heightProperty());
+/*        for(int y=0; y<Params.world_height; y++){
+        	for(int x=0; x<Params.world_width; x++ ){
+        		Rectangle rectangle = new Rectangle();
+        		rectangle.setStroke(Color.BLACK);
+        		rectangle.setFill(Color.WHITE);
+        		
+        		//binding rectangle positions to pane size
+        		rectangle.xProperty().bind(rectsAreaSize.multiply(x).divide(Params.world_width));
+                rectangle.yProperty().bind(rectsAreaSize.multiply(y).divide(Params.world_height));
+
+                // here we bind rectangle size to pane size 
+                rectangle.heightProperty().bind(rectsAreaSize.divide(Params.world_height));
+                rectangle.widthProperty().bind(rectsAreaSize.divide(Params.world_height));
+
+                root.getChildren().add(rectangle);
+        	}*/
+		//root.getChildren().add(canvas);
+
 //--------------Main Control Panel--------	
 		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
 		//---------Lists for the Dropdown Boxes------
         ObservableList<String> crittersOptions = 
         	    FXCollections.observableArrayList(
         	        "Craig", "Algae","Student","Margret","Cassidy", "Jeho" );
-        
         ObservableList<String> stepOpts = 
         	    FXCollections.observableArrayList(
         	        "1",  "2", "5", "10", "100", "Custom" );
+        ObservableList<String> SeedOpts= 
+        		FXCollections.observableArrayList(
+    	        "1",  "10", "100", "1000", "Custom" );
 		//-------DropDown Boxes--------
         final ComboBox<String> critterBox = new ComboBox<String>(crittersOptions);
         critterBox.setPromptText("Critter Type");
         controls.getChildren().add(critterBox);
         
-        final ComboBox<String> numberBox = new ComboBox<String>(stepOpts);
+        final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
 		controls.getChildren().add(numberBox);
  
@@ -96,7 +157,7 @@ public class CritterGUI extends Application{
        speed.setSnapToTicks(true);
        speed.setShowTickMarks(true);
        speed.setShowTickLabels(true);
-       speed.setLabelFormatter(new StringConverter <Double> () {
+       speed.setLabelFormatter(new StringConverter <Double> () {   //slider settings: 2, 5, 10, 20, 50, 100 
            @Override
            public String toString(Double n) {
                if (n < 16) return "2";
@@ -126,7 +187,7 @@ public class CritterGUI extends Application{
                }
            }
        });
-       //slider settings: 2, 5, 10, 20, 50, 100 
+
        animeCluster.getChildren().add(playbtn);
        animeCluster.getChildren().add(stopbtn);
        animeCluster.getChildren().add(speed);    
@@ -139,15 +200,25 @@ public class CritterGUI extends Application{
        animeCluster.setLayoutY(300);
        
        //-------Setting up the display----
+       //----adding the controls
        root.getChildren().add(canvas);
        root.getChildren().add(controls);
        root.getChildren().add(animeCluster);
        root.getChildren().add(quitbtn);
        root.getChildren().add(critterBox);
        root.getChildren().add(numberBox);
+       //----Adding the grid
+       stackPane.setPadding(new Insets(10,10,10,10));
+       StackPane.setAlignment(canvas, Pos.CENTER_LEFT);
+       stackPane.getChildren().add(canvas);
+       root.getChildren().add(stackPane);
+       //----Disable unnecessary elements
        critterBox.setDisable(true);
        numberBox.setDisable(true);
+       //----ShowTime--------
        primaryStage.setScene(s);
+       primaryStage.setWidth(1000);	
+       primaryStage.setHeight(700);
        primaryStage.show();
        
        
@@ -155,17 +226,21 @@ public class CritterGUI extends Application{
 	   	makebtn.setOnAction(new EventHandler<ActionEvent>() {
 	       @Override
 	       public void handle(ActionEvent box) {
-	       	critDropAction(critterBox);
+	       	//critterBox selection time
 	       }});
 	   //----Step Action---
 	   stepbtn.setOnAction(new EventHandler<ActionEvent>() {
 	       @Override
 	       public void handle(ActionEvent e) {
+	    	   //create textfield to see selection
+	    	   //find out how they'll select it
 	       		numberBox.setDisable(false);
+	    		numberBox.setItems(stepOpts);
 	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
 	       			@Override
 	       			public void handle(ActionEvent number) {
 	       				String numberChosen=numberBox.getValue();
+	       				System.out.print("Selection done");
 	       				Integer stepnum=Integer.parseInt(numberChosen);
 	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
 	       			}
@@ -191,47 +266,27 @@ public class CritterGUI extends Application{
 	   });
 	  
 	        //-----Quit Button Action
-	  quitbtn.setOnAction(new EventHandler<ActionEvent>() {
-	        @Override
-	        public void handle(ActionEvent e) {
-	        	System.exit(0);
-	        }
-	  });
-
-        
-
+	   quitbtn.setOnAction(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent e) {
+           		System.exit(0);
+           }
+	   });
 
 	}
-	
-	
-private void makeAction(Button makebtn){
-	
 }
 
-private void critDropAction(ComboBox<String> critterBox){
-	critterBox.setDisable(false);
-	critterBox.setValue("Craig");
-	critterBox.setOnAction(new EventHandler<ActionEvent>() {
-    	
-		@Override
-		public void handle(ActionEvent number) {
-			String critterChosen=critterBox.getValue();
-			String critterFullName="project4."+critterChosen;
-			//how do i get this value out of the method?
-		}
-    	
-    });   
-	critterBox.setDisable(true);
-}
+		/*critterBox.setDisable(false);
+		critterBox.setValue("Craig");
+		critterBox.setOnAction(new EventHandler<ActionEvent>() {
+	    	
+			@Override
+			public void handle(ActionEvent number) {
+				String critterChosen=critterBox.getValue();
+				String critterFullName="project4."+critterChosen;
+				//how do i get this value out of the method?
+			}
+	    	
+	    });   
+		critterBox.setDisable(true);*/
 
-/* private void clear(Canvas canvas) {
-	GraphicsContext gc = canvas.getGraphicsContext2D();
-	gc.setFill(Color.WHITE);
-	gc.fillRect(0,  0,  canvas.getWidth(), canvas.getHeight());
-}*/
-
-	/*screen.setAlignment(Pos.CENTER_LEFT);
-	screen.setHgap(500); //sets the height
-	screen.setVgap(500); //sets the width? 
-	screen.setPadding(new Insets(25, 25, 25, 25)); */
-}
