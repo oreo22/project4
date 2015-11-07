@@ -39,6 +39,8 @@ public class CritterGUI extends Application{
 	            GraphicsContext gc = getGraphicsContext2D();
 	            gc.clearRect(0, 0, width, height);
 	            
+	           
+	            
 	            for(int n=0; n<Critter.population.size(); n++){
 		    				int x = Critter.population.get(n).x_coord;
 		    				int y = Critter.population.get(n).y_coord;

@@ -13,7 +13,7 @@ public static void invalidCommand(String commandLine){
 
 public static void main(String[] args) throws InvalidCritterException {
 		//System.out.println("GLHF");
-		CritterGUI.launch(CritterGUI.class, args);
+		
 		Scanner game=new Scanner(System.in); //do we need to read from file or keyboard
 		//CritterWorld.makeWorld();
 //---------Controller------------------------	
@@ -41,7 +41,7 @@ public static void main(String[] args) throws InvalidCritterException {
 					Critter.setSeed(Long.parseLong(commands[1]));
 				}
 				else if(commands.length <=2 && commands[0].equals("step")){
-					if(commands.length==1){ CritterWorld.runWorld(1);}
+					if(commands.length==1){ CritterWorld.runWorld(1); CritterGUI.launch(CritterGUI.class, args);}
       			  	else if(commands.length==2){CritterWorld.runWorld(Integer.parseInt(commands[1]));}
 				}    
 				else if(commands.length <=3 && commands[0].equals("make")){
