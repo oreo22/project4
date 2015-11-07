@@ -15,7 +15,8 @@ import javafx.application.Application;
 	import javafx.scene.control.Button;
 	import javafx.scene.control.ComboBox;
 	import javafx.scene.control.Slider;
-	import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 	import javafx.scene.control.PasswordField;
 	import javafx.scene.control.TextField;
 	import javafx.scene.layout.Pane;
@@ -122,8 +123,16 @@ public class CritterGUI extends Application{
         
         final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
+		final TextField subject = new TextField("");
+		final TextArea text = new TextArea ("");
+		numberBox.setEditable(true);
+		/*	numberBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue ov, String t, String t1) {
+			address = t1;
+			}
+			});*/
 		controls.getChildren().add(numberBox);
- 
 		//-------Buttons-------
         //------Make Button---------
 		Button makebtn = new Button("Make"); //gotta change this to make it scalable
@@ -192,14 +201,13 @@ public class CritterGUI extends Application{
        animeCluster.getChildren().add(stopbtn);
        animeCluster.getChildren().add(speed);    
        
-       //-------Layout of the buttons-----
-       //MAKE THIS SCALABLE
-       controls.setLayoutX(30);
-       controls.setLayoutY(250);
-       animeCluster.setLayoutX(30);
-       animeCluster.setLayoutY(300);
+     //-------Setting up the display----
+       //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
+       controls.relocate(30,250);
+       animeCluster.relocate(0,350);
+       critterBox.relocate(30,300);
+       numberBox.relocate(critterBox.getWidth()+200,300);
        
-       //-------Setting up the display----
        //----adding the controls
        root.getChildren().add(canvas);
        root.getChildren().add(controls);
@@ -241,7 +249,11 @@ public class CritterGUI extends Application{
 	       			public void handle(ActionEvent number) {
 	       				String numberChosen=numberBox.getValue();
 	       				System.out.print("Selection done");
+	       				if(numberChosen.equals("Chosen")){
+	       					
+	       				}
 	       				Integer stepnum=Integer.parseInt(numberChosen);
+	       				System.out.print(stepnum);
 	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
 	       			}
 	       		});	       		
