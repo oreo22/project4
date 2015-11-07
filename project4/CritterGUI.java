@@ -38,13 +38,20 @@ public class CritterGUI extends Application{
 
 	            GraphicsContext gc = getGraphicsContext2D();
 	            gc.clearRect(0, 0, width, height);
-	           
-	            for(int y=0; y<Params.world_height; y++){
-	    			for(int x=0; x<Params.world_width; x++){
-	    				gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*4)), (height/(Params.world_height*3)));
+	            
+	            for(int n=0; n<Critter.population.size(); n++){
+		    				int x = Critter.population.get(n).x_coord;
+		    				int y = Critter.population.get(n).y_coord;
+		    				Color color = Critter.population.get(n).viewFillColor();
+		    				gc.setFill(color);
+		    				if(Critter.population.get(n).viewShape().equals( Critter.CritterShape.CIRCLE)){
+		    				 gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*5)), (height/(Params.world_height*3)));
+		    				}
+	    				
+	    				
 	    			}
 	    		}
-	        }
+	        
 
 	        @Override
 	        public boolean isResizable() {

@@ -1,6 +1,7 @@
 package project4;
-/* Diego Guerra (dag3222) 
- * Oriana Wong (oyw58)
+/*
+ * Name: <Diego Guerra>
+ * EID: <dag3222>
  */
 public class Craig extends Critter {
 	
@@ -24,6 +25,7 @@ public class Craig extends Critter {
 	public void doTimeStep() {
 		/* take one step forward */
 		walk(dir);
+		
 		if (getEnergy() > 150) {
 			Craig child = new Craig();
 			for (int k = 0; k < 8; k += 1) {
@@ -70,4 +72,11 @@ public class Craig extends Critter {
 		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * craigs.size()) + "% left   ");
 		System.out.println();
 	}
+	
+	@Override
+	public CritterShape viewShape() { return CritterShape.SQUARE; }
+
+	@Override
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
+
 }
