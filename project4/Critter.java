@@ -287,27 +287,7 @@ public abstract class Critter{
 	
 //----------Showing the Grid of the World-------
 	public static void displayWorld() {
-		System.out.println();
-		for(int y=0; y<Params.world_height; y++){
-			System.out.print("|");
-			for(int x=0; x<Params.world_width; x++){ 
-				String output = " ";
-				/*if(grid.get(y).get(x)!=0){
-					int index=grid.get(y).get(x);
-					output=population.get(index).toString();
-				}*/
-				
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
-						output = Critter.population.get(c).toString();
-						break;
-					}
-				}
-				System.out.print(output);
-			}
-			System.out.print("|");
-			System.out.println();
-		}
+		
 	}
 
 /*	static void updateGrid(){
