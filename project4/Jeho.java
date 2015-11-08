@@ -98,8 +98,10 @@ public class Jeho extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.DIAMOND;
 	}
 
+	
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.RED; }
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.BLUE; }
 }

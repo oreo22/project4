@@ -52,10 +52,13 @@ public class CritterGUI extends Application{
 		primaryStage.centerOnScreen();
 		primaryStage.show();*/
 	public void start(Stage primaryStage) {
+		System.setProperty("glass.accessible.force", "false");
 		primaryStage.setTitle("Critter Simulation");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
+	/*	double width = 1000;
+		double height = 1000;*/
 		Group root = new Group();
 
 		//------Grid of Critters-------
@@ -63,11 +66,12 @@ public class CritterGUI extends Application{
 		
 		Scene s = new Scene(root, width/2, height/2, Color.WHITE);
 		canvas.setWidth(width/2);
-		canvas.setHeight(height/2);
+		canvas.setHeight((height-height/64)/2);
+	
 		
 
 //--------------Main Control Panel--------	
-		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
+		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,width/86,0);
 		//---------Lists for the Dropdown Boxes------
         ObservableList<String> crittersOptions = 
         	    FXCollections.observableArrayList(
@@ -81,7 +85,7 @@ public class CritterGUI extends Application{
 		//-------DropDown Boxes--------
         final ComboBox<String> critterBox = new ComboBox<String>(crittersOptions);
         critterBox.setPromptText("Critter Type");
-        controls.getChildren().add(critterBox);
+      
         
         final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
@@ -94,24 +98,31 @@ public class CritterGUI extends Application{
 		
 		
 		//-------Buttons-------
-        //------Make Button---------
+        //------Make Button---------\
+		double size = (width/100);
 		Button makebtn = new Button("Make"); //gotta change this to make it scalable
+		makebtn.setStyle("-fx-font: " + size + " arial;");
 		controls.getChildren().add(makebtn);
 		//------Step Button---------
         Button stepbtn = new Button("Step");
+        stepbtn.setStyle("-fx-font: " + size + " arial;");
         controls.getChildren().add(stepbtn);
 		//------Seed Button---------
 	    Button seedbtn = new Button("Seed");
+	    
+	    seedbtn.setStyle("-fx-font: " + size + " arial;");
 	    controls.getChildren().add(seedbtn);
 		//------Stats Button--------
 	    Button statsbtn = new Button("Stats");
+	    
+	    statsbtn.setStyle("-fx-font: " + size + " arial;");
 	    controls.getChildren().add(statsbtn);
        
 		//------Quit Button---------
        Button quitbtn=new Button("X");
        quitbtn.setTextFill(Color.RED);
      //  quitbtn.setAlignment(Pos.BOTTOM_RIGHT);
-       quitbtn.relocate((width-(width/8))/2, 0);
+       quitbtn.relocate((width-(width/16))/2, 0);
        
        //------Animation Cluster----
        FlowPane animeCluster=new FlowPane(Orientation.HORIZONTAL, 10,0);
@@ -164,12 +175,12 @@ public class CritterGUI extends Application{
        
      //-------Setting up the display----
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
-       controls.relocate(width/4+width/32,height/5);
+       controls.relocate(width * 9/32,height/5);
        animeCluster.relocate(width/5,height/3);
-       critterBox.relocate(width/4+width/64,height/4);
-       textSubmit.relocate(critterBox.getWidth()+800,300);
-       numberBox.relocate(width/4+width/10+width/64,height/4);
-       customValues.relocate(numberBox.getLayoutX(), numberBox.getLayoutY());
+       critterBox.relocate(width * 17/64,height/4);
+       //textSubmit.relocate(critterBox.getWidth()+800,300);
+       numberBox.relocate(width*117/320,height/4);
+       //customValues.relocate(numberBox.getLayoutX(), numberBox.getLayoutY());
        
        //----adding the controls
        root.getChildren().add(stackPane);
@@ -179,20 +190,19 @@ public class CritterGUI extends Application{
        root.getChildren().add(critterBox);
        root.getChildren().add(numberBox);
        //----Adding the grid
-       stackPane.setPadding(new Insets(10,10,10,10));
+       stackPane.setPadding(new Insets(0,0,0,width/(width*2)));
        StackPane.setAlignment(canvas, Pos.CENTER_LEFT);
        stackPane.getChildren().add(canvas);
        
        //----Disable unnecessary elements
        critterBox.setDisable(true);
-       textSubmit.setDisable(true);
        numberBox.setDisable(true);
        
        //----ShowTime--------
 		primaryStage.setScene(s);
 		primaryStage.setWidth(width/2);
 		primaryStage.setHeight(height/2);
-		primaryStage.setResizable(true);
+		primaryStage.setResizable(false);
 		primaryStage.centerOnScreen();
 		Critter.displayWorld();
 		primaryStage.show();
@@ -201,8 +211,25 @@ public class CritterGUI extends Application{
 	   //----Make Action
 	   	makebtn.setOnAction(new EventHandler<ActionEvent>() {
 	       @Override
-	       public void handle(ActionEvent box) {
-	       	//critterBox selection time
+	       public void handle(ActionEvent e) {
+	    	  
+	    	   critterBox.setDisable(false);
+	    	   critterBox.setItems(crittersOptions);
+	    	   critterBox.setEditable(true);
+	    	   critterBox.setOnAction(new EventHandler<ActionEvent>() {
+	    		   String critterChosen;
+	       			@Override
+	       			public void handle(ActionEvent number) {
+	       				critterChosen="project4."+critterBox.getValue();
+	       				try {
+							Critter.makeCritter(critterChosen);
+						} catch (InvalidCritterException e) {
+						}
+	       				Critter.displayWorld();
+	       				critterBox.setDisable(true);
+	       			}
+	       		});	     
+	       		
 	       }});
 	   //----Step Action---
 	   stepbtn.setOnAction(new EventHandler<ActionEvent>() {

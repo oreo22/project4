@@ -1,4 +1,6 @@
 package project4;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 /* Diego Guerra (dag3222) 
  * Oriana Wong (oyw58)
  */
@@ -324,17 +326,24 @@ public abstract class Critter{
 		gc.clearRect(0, 0, CritterGUI.canvas.getWidth(), CritterGUI.canvas.getHeight());
 		gc.setFill(Color.BLACK);
 		for(int n=0; n<population.size(); n++){
-			Color color = population.get(n).viewColor();
+			Color color = population.get(n).viewFillColor();
+			Color outLine = population.get(n).viewOutlineColor();
+			
 			gc.setFill(color);
+			gc.setStroke(outLine);
+			
 			double x = population.get(n).x_coord;
 			double y = population.get(n).y_coord;
 			if(population.get(n).viewShape() == Critter.CritterShape.CIRCLE){
 				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
-			}
+				 gc.strokeOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+				 }
 			else if(population.get(n).viewShape() == Critter.CritterShape.SQUARE){
 				 gc.fillRect(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+				 gc.strokeRect(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
 			}
 			else if(population.get(n).viewShape() == Critter.CritterShape.TRIANGLE){
+				
 				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
 				double xPos = x*(CritterGUI.canvas.getWidth()/(Params.world_width*2));
 				double width = (CritterGUI.canvas.getWidth()/(Params.world_width*2));
@@ -342,6 +351,7 @@ public abstract class Critter{
 				double[] xPoints = {xPos, xPos+(width/2),xPos+width};
 				double[] yPoints = {yPos+height, yPos,yPos+height};
 				gc.fillPolygon(xPoints, yPoints, 3);
+				gc.strokePolygon(xPoints, yPoints, 3);
 			}
 			else if(population.get(n).viewShape() == Critter.CritterShape.DIAMOND){
 				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
@@ -351,6 +361,7 @@ public abstract class Critter{
 				double[] xPoints = {xPos, xPos+(width/2),xPos+width, xPos+(width/2)};
 				double[] yPoints = {yPos+(height/2), yPos, yPos+(height/2), yPos+height};
 				gc.fillPolygon(xPoints, yPoints, 4);
+				gc.strokePolygon(xPoints, yPoints, 4);
 			}
 			else if(population.get(n).viewShape() == Critter.CritterShape.STAR){
 				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
@@ -360,6 +371,7 @@ public abstract class Critter{
 				double[] xPoints = {xPos+(width*9/16), xPos+(width*7/16), xPos, xPos+(width*3/8), xPos+(width*2/8), xPos+(width*9/16), xPos+(width*7/8), xPos+(width*6/8), xPos+width, xPos+(width*11/16)};
 				double[] yPoints = {yPos, yPos+(height*3/8), yPos+(height*3/8), yPos+(height*5/8), yPos+height, yPos+(height*3/4), yPos+(height), yPos+(height*5/8), yPos+(height*3/8), yPos+(height*3/8)};
 				gc.fillPolygon(xPoints, yPoints, 10);
+				gc.strokePolygon(xPoints, yPoints, 10);
 				}
 		}
 

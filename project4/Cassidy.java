@@ -67,7 +67,9 @@ public class Cassidy extends Critter {
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.STAR;
 	}
+	//public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.YELLOW; }
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.YELLOW; }
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLACK; }
 }

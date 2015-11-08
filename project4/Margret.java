@@ -23,10 +23,7 @@ public class Margret extends Critter{
 
 	@Override
 	public boolean fight(String oponent) {
-		int roll= Critter.getRandomInt(5);
-		if(oponent== "project4.Craig" && roll>=2){
-			return false;
-		}
+	
 		return true; //always fights
 	}
 
@@ -38,8 +35,10 @@ public class Margret extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.TRIANGLE;
 	}
+	
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.PURPLE; }
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
 
 }
