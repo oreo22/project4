@@ -34,42 +34,6 @@ import javafx.scene.control.Label;
 	import javafx.collections.ObservableList;  
 
 public class CritterGUI extends Application{
-	   class ResizableCanvas extends Canvas {
-		   public ResizableCanvas() {
-	            // Redraw canvas when size changes.
-	            widthProperty().addListener(evt -> draw());
-	            heightProperty().addListener(evt -> draw());
-	        }
-
-	        private void draw() {
-	            double width = getWidth();
-	            double height = getHeight();
-
-	            GraphicsContext gc = getGraphicsContext2D();
-	            gc.clearRect(0, 0, width, height);
-	           
-	            for(int y=0; y<Params.world_height; y++){
-	    			for(int x=0; x<Params.world_width; x++){
-	    				gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*4)), (height/(Params.world_height*3)));
-	    			}
-	    		}
-	        }
-
-	        @Override
-	        public boolean isResizable() {
-	            return true;
-	        }
-
-	        @Override
-	        public double prefWidth(double height) {
-	            return getWidth();
-	        }
-
-	        @Override
-	        public double prefHeight(double width) {
-	            return getHeight();
-	        }
-	    }
 
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
