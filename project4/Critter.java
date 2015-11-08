@@ -5,17 +5,20 @@ package project4;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
  */
 public abstract class Critter{
 	private int energy = 0;	
-	public int x_coord;
-	public int y_coord;
+	private int x_coord;
+	private int y_coord;
 	private boolean move_flag;
 	private static java.util.Random rand = new java.util.Random();
-	public static ArrayList<Critter> population=new ArrayList<Critter>();
+	private static ArrayList<Critter> population=new ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static boolean fightPhase = false;
 	/* NEW FOR PROJECT 5 */
@@ -317,7 +320,15 @@ public abstract class Critter{
 	
 //----------Showing the Grid of the World-------
 	public static void displayWorld() {
-		
+		GraphicsContext gc  = CritterGUI.canvas.getGraphicsContext2D();
+		for(int n=0; n<population.size(); n++){
+			Color color = population.get(n).viewColor();
+			gc.setFill(color);
+			if(population.get(n).viewShape() == Critter.CritterShape.CIRCLE){
+				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
+		}
+			
 		
 	/*	System.out.println();
 		for(int y=0; y<Params.world_height; y++){

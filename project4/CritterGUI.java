@@ -24,7 +24,8 @@ import javafx.scene.paint.Color;
 	import javafx.stage.Stage;
 	import javafx.scene.shape.*;
 public class CritterGUI extends Application{
-	   class ResizableCanvas extends Canvas {
+	public static Canvas canvas;
+	   /*class ResizableCanvas extends Canvas {
 
 	        public ResizableCanvas() {
 	            // Redraw canvas when size changes.
@@ -69,11 +70,10 @@ public class CritterGUI extends Application{
 	        public double prefHeight(double width) {
 	            return getHeight();
 	        }
-	    }
+	    }*/
 	
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
-		ResizableCanvas canvas = new ResizableCanvas();
 		
 		StackPane stackPane = new StackPane();
 		stackPane.getChildren().add(canvas);
@@ -81,7 +81,7 @@ public class CritterGUI extends Application{
 		
 		canvas.widthProperty().bind(stackPane.widthProperty());
 		canvas.heightProperty().bind(stackPane.heightProperty());
-		
+		Critter.displayWorld();
 		
 	
       
