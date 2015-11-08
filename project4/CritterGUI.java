@@ -85,12 +85,7 @@ public class CritterGUI extends Application{
         
         final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
-		TextField customValues=new TextField();
-		Button submit=new Button("Go!");
-		HBox textSubmit= new HBox(2);
-		textSubmit.getChildren().add(numberBox);
-		textSubmit.getChildren().add(customValues);
-		textSubmit.getChildren().add(submit);
+		numberBox.setEditable(true);
 		
 		
 		//-------Buttons-------
@@ -166,10 +161,8 @@ public class CritterGUI extends Application{
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
        controls.relocate(width/4+width/32,height/5);
        animeCluster.relocate(width/5,height/3);
-       critterBox.relocate(width/4+width/64,height/4);
-       textSubmit.relocate(critterBox.getWidth()+800,300);
+       critterBox.relocate(width/4+width/64,height/4);       
        numberBox.relocate(width/4+width/10+width/64,height/4);
-       customValues.relocate(numberBox.getLayoutX(), numberBox.getLayoutY());
        
        //----adding the controls
        root.getChildren().add(stackPane);
@@ -185,7 +178,6 @@ public class CritterGUI extends Application{
        
        //----Disable unnecessary elements
        critterBox.setDisable(true);
-       textSubmit.setDisable(true);
        numberBox.setDisable(true);
        
        //----ShowTime--------
@@ -211,28 +203,31 @@ public class CritterGUI extends Application{
 	    	   //create textfield to see selection
 	    	   //find out how they'll select it
 	       		numberBox.setDisable(false);
+	      		//numberBox.getSelectionModel().clearSelection();
+	       		
 	    		numberBox.setItems(stepOpts);
 	    		numberBox.setPromptText("Choose/Enter a Number");
-	    		numberBox.setEditable(true);
+	    		numberBox.getSelectionModel().clearSelection();
 	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
 	       			@Override
 	       			public void handle(ActionEvent number) {
-	       				String numberChosen=numberBox.getValue();
-	       				System.out.print("Selection done");
-	       				if(numberChosen.equals("Custom")){
-	       					textSubmit.setDisable(false);
-	       					// still broken
+	       				String numberChosen = null;
+	       				
+	       				 numberChosen= numberBox.getSelectionModel().getSelectedItem();
+	       				if(numberChosen != null){
+	       					Integer stepnum=Integer.parseInt(numberChosen);
+	       					System.out.print(stepnum);
+	       					CritterWorld.runWorld(stepnum);//idk if this is the best decision...
+	       					Critter.displayWorld();
+	       					numberBox.setDisable(true);
 	       				}
-	       				Integer stepnum=Integer.parseInt(numberChosen);
-	       				System.out.print(stepnum);
-	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
-	       				Critter.displayWorld();
-	       				numberBox.setDisable(true);
 	       			}
 	       		});	       		
 	       }
 	       });
-		
+
+	   //----Seed Action---
+	   //----Stats Action---
 	   //-----AnimeClusterAction------
 	   stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
