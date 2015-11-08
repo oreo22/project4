@@ -65,4 +65,10 @@ public class Cassidy extends Critter {
 		
 	}
 
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
