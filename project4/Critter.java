@@ -52,8 +52,34 @@ public abstract class Critter{
 	
 	public abstract CritterShape viewShape(); 
 	
-	protected void look(int direction) {}
-	protected void look2(int direction) {}
+	protected String look(int direction) {
+		/*If the location is unoccupied, then look returns null. If the location is occupied, 
+		 * then look returns the toString() result for the Critter in that location.
+		If a critter invokes look during doTimeStep, then the result of calling look is based 
+		on the old position of the critter. If a critter invokes look during its fight method, 
+		then the result of calling look is based on the most current up-to-date information.
+		*/
+		int[] coord=findNewLocation(direction,1);
+		for(int z=0; z<Critter.population.size(); z++){
+			if(Critter.population.get(z).x_coord == coord[0] && Critter.population.get(z).y_coord == coord[1]){
+				return population.get(z).toString();
+			}
+		}
+		return null;
+	}
+	protected String look2(int direction) {
+		/*look2() looks at the location that’s two grid locations away in the same direction.
+		If a critter invokes look during doTimeStep, then the result of calling look is based 
+		on the old position of the critter. If a critter invokes look during its fight method, 
+		then the result of calling look is based on the most current up-to-date information.*/
+		int[] coord=findNewLocation(direction,2);
+		for(int z=0; z<Critter.population.size(); z++){
+			if(Critter.population.get(z).x_coord == coord[0] && Critter.population.get(z).y_coord == coord[1]){
+				return population.get(z).toString();
+			}
+		}
+		return null;
+	}
 	
 	
 	public static int getRandomInt(int max) {
