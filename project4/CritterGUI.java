@@ -1,7 +1,8 @@
 package project4;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+	import java.awt.Dimension;
+	import java.awt.Toolkit;
+import java.util.List;
 
 import javafx.application.Application;
 	import javafx.event.ActionEvent;
@@ -18,8 +19,8 @@ import javafx.application.Application;
 	import javafx.scene.control.Button;
 	import javafx.scene.control.ComboBox;
 	import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Label;
+	import javafx.scene.control.TextArea;
+	import javafx.scene.control.Label;
 	import javafx.scene.control.PasswordField;
 	import javafx.scene.control.TextField;
 	import javafx.scene.layout.Pane;
@@ -36,6 +37,13 @@ import javafx.scene.control.Label;
 	import javafx.collections.FXCollections;
 	import javafx.collections.ObservableList;  
 
+/*
+ * RunStats Constantly
+ * Make needs numbers
+ * Set Seed
+ * Animation Speed
+ * Reset?
+ * Show?*/
 public class CritterGUI extends Application{
 	public static Canvas canvas;
 	
@@ -72,12 +80,13 @@ public class CritterGUI extends Application{
         ObservableList<String> crittersOptions = 
         	    FXCollections.observableArrayList(
         	        "Craig", "Algae","Student","Margret","Cassidy", "Jeho" );
-        ObservableList<String> stepOpts = 
+        ObservableList<String> makeOpts = //custom is from the editable field
         	    FXCollections.observableArrayList(
-        	        "1",  "2", "5", "10", "100", "Custom" );
-        ObservableList<String> SeedOpts= 
-        		FXCollections.observableArrayList(
-    	        "1",  "10", "100", "1000", "Custom" );
+        	        "1", "2", "5", "25", "50", "100" );
+        ObservableList<String> stepOpts = //custom is from the editable field
+        		//are we allowed to put 10 here?
+        	    FXCollections.observableArrayList(
+        	        "1", "10", "100", "1000" );
 		//-------DropDown Boxes--------
         final ComboBox<String> critterBox = new ComboBox<String>(crittersOptions);
         critterBox.setPromptText("Critter Type");
@@ -194,14 +203,80 @@ public class CritterGUI extends Application{
 	   	makebtn.setOnAction(new EventHandler<ActionEvent>() {
 	       @Override
 	       public void handle(ActionEvent box) {
-	       	//critterBox selection time
-	       }});
+	    	   	controls.setDisable(true);
+	    	   	animeCluster.setDisable(true);
+	       		critterBox.setDisable(false);
+	       		critterBox.setItems(crittersOptions);
+	       		critterBox.getSelectionModel().clearSelection();
+	       		critterBox.setOnAction(new EventHandler<ActionEvent>() {
+	       			@Override
+	       			public void handle(ActionEvent number) {
+	       				String critterChoosen="project4." + critterBox.getSelectionModel().getSelectedItem();
+	    	       		numberBox.setDisable(false);
+	    	       		numberBox.setItems(makeOpts);
+	    	    		numberBox.setPromptText("Choose/Enter a Number");
+	    	    		numberBox.getSelectionModel().clearSelection();
+	    	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
+	    	       			@Override
+	    	       			public void handle(ActionEvent number) {
+	    	       				String numberChosen = null;
+	    	       				 numberChosen= numberBox.getSelectionModel().getSelectedItem();
+	    	       				if(numberChosen != null){
+	    	       					Integer stepnum=Integer.parseInt(numberChosen);	
+		    	       				for(int x=0; x<stepnum; x++){
+			    	       				try {
+			    							Critter.makeCritter(critterChoosen);
+			    						} catch (Throwable t) {
+			    						}
+		    	       				}
+		    	       				Critter.displayWorld();
+		    	       				numberBox.setDisable(true);
+		    	       				critterBox.setDisable(true);
+		    	       				animeCluster.setDisable(false);
+		    	       				controls.setDisable(false);
+		    	       			}
+	    	       			}
+	    	       		});	
+	       			}
+	       		});	
+	       }
+	   });
 	   //----Step Action---
 	   stepbtn.setOnAction(new EventHandler<ActionEvent>() {
 	       @Override
 	       public void handle(ActionEvent e) {
-	    	   //create textfield to see selection
-	    	   //find out how they'll select it
+	    	   	controls.setDisable(true);
+	    	   	animeCluster.setDisable(true);
+	       		numberBox.setDisable(false);
+	       		numberBox.setItems(stepOpts);
+	       		//numberBox.getSelectionModel().clearSelection();
+	       		//TRY MAKE AND THEN STEP!! ??
+	    		numberBox.setPromptText("Choose/Enter a Number");
+	    		numberBox.getSelectionModel().clearSelection();
+	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
+	       			@Override
+	       			public void handle(ActionEvent number) {
+	       				String numberChosen = null;
+	       				
+	       				 numberChosen= numberBox.getSelectionModel().getSelectedItem();
+	       				if(numberChosen != null){
+	       					Integer stepnum=Integer.parseInt(numberChosen);
+	       					CritterWorld.runWorld(stepnum);
+	       					Critter.displayWorld();
+	       					animeCluster.setDisable(false);
+	       					controls.setDisable(false);
+	       				}
+	       			}
+	       		});	       		
+	       }
+	       });
+
+	   //----Seed Action---
+	   seedbtn.setOnAction(new EventHandler<ActionEvent>() {
+	       @Override
+	       public void handle(ActionEvent e) {
+	    	   	controls.setDisable(true);
+	    	   	animeCluster.setDisable(true);
 	       		numberBox.setDisable(false);
 	      		//numberBox.getSelectionModel().clearSelection();
 	       		
@@ -216,18 +291,21 @@ public class CritterGUI extends Application{
 	       				 numberChosen= numberBox.getSelectionModel().getSelectedItem();
 	       				if(numberChosen != null){
 	       					Integer stepnum=Integer.parseInt(numberChosen);
-	       					System.out.print(stepnum);
-	       					CritterWorld.runWorld(stepnum);//idk if this is the best decision...
-	       					Critter.displayWorld();
+	       					Critter.setSeed(stepnum);
 	       					numberBox.setDisable(true);
+	       					animeCluster.setDisable(false);
+	       					controls.setDisable(false);
 	       				}
 	       			}
 	       		});	       		
 	       }
 	       });
-
-	   //----Seed Action---
+	   
 	   //----Stats Action---
+	   /*Object obj = Class.forName(commands[1]).newInstance();
+	   Class.forName(commands[1]).getMethod("runStats", List.class).invoke(obj, Critter.getInstances(commands[1]));
+	*/
+	   
 	   //-----AnimeClusterAction------
 	   stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
