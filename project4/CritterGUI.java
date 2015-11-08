@@ -263,7 +263,6 @@ public class CritterGUI extends Application{
 	       		numberBox.setDisable(false);
 	       		numberBox.setItems(stepOpts);
 	       		//numberBox.getSelectionModel().clearSelection();
-	       		//TRY MAKE AND THEN STEP!! ??
 	    		numberBox.setPromptText("Choose/Enter a Number");
 	    		numberBox.getSelectionModel().clearSelection();
 	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
