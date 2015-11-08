@@ -1,8 +1,6 @@
 package project4;
 import java.util.List;
 import java.util.Scanner;
-
-import javafx.scene.canvas.Canvas;
 /* Diego Guerra (dag3222) 
  * Oriana Wong (oyw58)
  */
@@ -14,7 +12,7 @@ public static void invalidCommand(String commandLine){
 }
 
 public static void main(String[] args) throws InvalidCritterException {
-		CritterGUI.canvas = new Canvas();
+		//System.out.println("GLHF");
 		CritterGUI.launch(CritterGUI.class, args);
 		Scanner game=new Scanner(System.in); //do we need to read from file or keyboard
 		//CritterWorld.makeWorld();

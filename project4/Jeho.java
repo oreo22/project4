@@ -96,10 +96,4 @@ public class Jeho extends Critter{
 		
 	}
 
-	@Override
-	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

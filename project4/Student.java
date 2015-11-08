@@ -79,10 +79,4 @@ public class Student extends Critter{
 		System.out.println("There are " + failing + " student(s) failing this course and should drop");
 		
 	}
-
-	@Override
-	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
