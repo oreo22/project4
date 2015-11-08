@@ -5,6 +5,9 @@ package project4;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
@@ -19,6 +22,36 @@ public abstract class Critter{
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static boolean fightPhase = false;
 	
+	public enum CritterShape {
+		CIRCLE,
+		SQUARE,
+		TRIANGLE,
+		DIAMOND,
+		STAR
+	}
+	
+	/* the default color is white, which I hope makes critters invisible by default
+	 * If you change the background color of your View component, then update the default
+	 * color to be the same as you background 
+	 * 
+	 * critters must override at least one of the following three methods, it is not 
+	 * proper for critters to remain invisible in the view
+	 * 
+	 * If a critter only overrides the outline color, then it will look like a non-filled 
+	 * shape, at least, that's the intent. You can edit these default methods however you 
+	 * need to, but please preserve that intent as you implement them. 
+	 */
+	public javafx.scene.paint.Color viewColor() { 
+		return javafx.scene.paint.Color.WHITE; 
+	}
+	
+	public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); }
+	public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
+	
+	public abstract CritterShape viewShape(); 
+	
+	protected void look(int direction) {}
+	protected void look2(int direction) {}
 	
 	
 	public static int getRandomInt(int max) {
@@ -287,57 +320,49 @@ public abstract class Critter{
 	
 //----------Showing the Grid of the World-------
 	public static void displayWorld() {
-		System.out.println();
-		for(int y=0; y<Params.world_height; y++){
-			System.out.print("|");
-			for(int x=0; x<Params.world_width; x++){ 
-				String output = " ";
-				/*if(grid.get(y).get(x)!=0){
-					int index=grid.get(y).get(x);
-					output=population.get(index).toString();
-				}*/
-				
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
-						output = Critter.population.get(c).toString();
-						break;
-					}
-				}
-				System.out.print(output);
+		GraphicsContext gc  = CritterGUI.canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, CritterGUI.canvas.getWidth(), CritterGUI.canvas.getHeight());
+		gc.setFill(Color.BLACK);
+		for(int n=0; n<population.size(); n++){
+			Color color = population.get(n).viewColor();
+			gc.setFill(color);
+			double x = population.get(n).x_coord;
+			double y = population.get(n).y_coord;
+			if(population.get(n).viewShape() == Critter.CritterShape.CIRCLE){
+				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
 			}
-			System.out.print("|");
-			System.out.println();
+			else if(population.get(n).viewShape() == Critter.CritterShape.SQUARE){
+				 gc.fillRect(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.TRIANGLE){
+				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
+				double xPos = x*(CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double width = (CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double height = (CritterGUI.canvas.getHeight()/(Params.world_height*2));
+				double[] xPoints = {xPos, xPos+(width/2),xPos+width};
+				double[] yPoints = {yPos+height, yPos,yPos+height};
+				gc.fillPolygon(xPoints, yPoints, 3);
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.DIAMOND){
+				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
+				double xPos = x*(CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double width = (CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double height = (CritterGUI.canvas.getHeight()/(Params.world_height*2));
+				double[] xPoints = {xPos, xPos+(width/2),xPos+width, xPos+(width/2)};
+				double[] yPoints = {yPos+(height/2), yPos, yPos+(height/2), yPos+height};
+				gc.fillPolygon(xPoints, yPoints, 4);
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.STAR){
+				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
+				double xPos = x*(CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double width = (CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double height = (CritterGUI.canvas.getHeight()/(Params.world_height*2));
+				double[] xPoints = {xPos+(width*9/16), xPos+(width*7/16), xPos, xPos+(width*3/8), xPos+(width*2/8), xPos+(width*9/16), xPos+(width*7/8), xPos+(width*6/8), xPos+width, xPos+(width*11/16)};
+				double[] yPoints = {yPos, yPos+(height*3/8), yPos+(height*3/8), yPos+(height*5/8), yPos+height, yPos+(height*3/4), yPos+(height), yPos+(height*5/8), yPos+(height*3/8), yPos+(height*3/8)};
+				gc.fillPolygon(xPoints, yPoints, 10);
+				}
 		}
+
+			
 	}
-
-/*	static void updateGrid(){
-		for(int y=0; y<Params.world_height; y++){
-			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
-			for(int x=0; x<Params.world_width; x++){ 
-				ArrayList<Integer> occupants=new ArrayList<Integer>();
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
-						occupants.add(c); //add this index
-					}
-				}
-				xKeys.put(x,occupants); //make a bunch of x keys to arrays of indexes
-			}
-			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position			
-		} 
-	}*/
 }
-
-
-//----Unused code-----
-/*switch (direction){
-case 0: if(y_coord == 0){ y_coord = Params.world_height-1;}else{y_coord = (y_coord-1)%Params.world_height;}			  break;
-case 1: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-case 2: x_coord=(x_coord+1)%Params.world_width;		  break;
-case 3: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord+1)%Params.world_height; break;
-case 4: y_coord=(y_coord+1)%Params.world_height; 			  break;
-case 5: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} 
-		y_coord=(y_coord+1)%Params.world_height; break; //what if it is at 0
-case 6: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} break;
-case 7: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-default: System.out.println("Invalid direction. Try again."); break;
-}*/

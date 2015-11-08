@@ -268,4 +268,3 @@ public class CritterGUI extends Application{
 	    	
 	    });   
 		critterBox.setDisable(true);*/
-
