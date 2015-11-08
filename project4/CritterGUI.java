@@ -1,5 +1,8 @@
 package project4;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javafx.application.Application;
 	import javafx.event.ActionEvent;
 	import javafx.event.EventHandler;
@@ -34,75 +37,34 @@ import javafx.scene.control.Label;
 	import javafx.collections.ObservableList;  
 
 public class CritterGUI extends Application{
-	   class ResizableCanvas extends Canvas {
-		   public ResizableCanvas() {
-	            // Redraw canvas when size changes.
-	            widthProperty().addListener(evt -> draw());
-	            heightProperty().addListener(evt -> draw());
-	        }
-
-	        private void draw() {
-	            double width = getWidth();
-	            double height = getHeight();
-
-	            GraphicsContext gc = getGraphicsContext2D();
-	            gc.clearRect(0, 0, width, height);
-	           
-	            for(int y=0; y<Params.world_height; y++){
-	    			for(int x=0; x<Params.world_width; x++){
-	    				gc.fillOval(x*(width/(Params.world_width*2)), y*(height/(Params.world_height)), (width/(Params.world_width*4)), (height/(Params.world_height*3)));
-	    			}
-	    		}
-	        }
-
-	        @Override
-	        public boolean isResizable() {
-	            return true;
-	        }
-
-	        @Override
-	        public double prefWidth(double height) {
-	            return getWidth();
-	        }
-
-	        @Override
-	        public double prefHeight(double width) {
-	            return getHeight();
-	        }
-	    }
-
+	public static Canvas canvas;
+	
+	
+/*	
+        stackPane.setPadding(new Insets(10,10,10,10));
+        StackPane.setAlignment(canvas, Pos.CENTER);
+        
+		primaryStage.setScene(s);
+		
+		primaryStage.setWidth(width/2);
+		primaryStage.setHeight(height/2);
+		primaryStage.setResizable(false);
+		primaryStage.centerOnScreen();
+		primaryStage.show();*/
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
-		int height=500;   int width=500;
-		primaryStage.setHeight(height);
-		primaryStage.setWidth(width);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
 		Group root = new Group();
-		Scene s = new Scene(root, height, width, Color.WHITE);
 
 		//------Grid of Critters-------
-		ResizableCanvas canvas = new ResizableCanvas();
 		StackPane stackPane = new StackPane();
-		canvas.widthProperty().bind(stackPane.widthProperty());
-		canvas.heightProperty().bind(stackPane.heightProperty());
 		
-        //NumberBinding rectsAreaSize = Bindings.min(stackPane.heightProperty(), stackPane.heightProperty());
-/*        for(int y=0; y<Params.world_height; y++){
-        	for(int x=0; x<Params.world_width; x++ ){
-        		Rectangle rectangle = new Rectangle();
-        		rectangle.setStroke(Color.BLACK);
-        		rectangle.setFill(Color.WHITE);
-        		
-        		//binding rectangle positions to pane size
-        		rectangle.xProperty().bind(rectsAreaSize.multiply(x).divide(Params.world_width));
-                rectangle.yProperty().bind(rectsAreaSize.multiply(y).divide(Params.world_height));
-
-                // here we bind rectangle size to pane size 
-                rectangle.heightProperty().bind(rectsAreaSize.divide(Params.world_height));
-                rectangle.widthProperty().bind(rectsAreaSize.divide(Params.world_height));
-
-                root.getChildren().add(rectangle);
-        	}*/
-		//root.getChildren().add(canvas);
+		Scene s = new Scene(root, width/2, height/2, Color.WHITE);
+		canvas.setWidth(width/2);
+		canvas.setHeight(height/2);
+		
 
 //--------------Main Control Panel--------	
 		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
@@ -203,13 +165,14 @@ public class CritterGUI extends Application{
        
      //-------Setting up the display----
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
-       controls.relocate(30,250);
-       animeCluster.relocate(0,350);
-       critterBox.relocate(30,300);
-       numberBox.relocate(critterBox.getWidth()+200,300);
+       controls.relocate(630,250);
+       animeCluster.relocate(600,350);
+       critterBox.relocate(630,300);
+       numberBox.relocate(critterBox.getWidth()+800,300);
+       
        
        //----adding the controls
-       root.getChildren().add(canvas);
+       root.getChildren().add(stackPane);
        root.getChildren().add(controls);
        root.getChildren().add(animeCluster);
        root.getChildren().add(quitbtn);
@@ -219,15 +182,18 @@ public class CritterGUI extends Application{
        stackPane.setPadding(new Insets(10,10,10,10));
        StackPane.setAlignment(canvas, Pos.CENTER_LEFT);
        stackPane.getChildren().add(canvas);
-       root.getChildren().add(stackPane);
+       
        //----Disable unnecessary elements
        critterBox.setDisable(true);
        numberBox.setDisable(true);
        //----ShowTime--------
-       primaryStage.setScene(s);
-       primaryStage.setWidth(1000);	
-       primaryStage.setHeight(700);
-       primaryStage.show();
+		primaryStage.setScene(s);
+		primaryStage.setWidth(width/2);
+		primaryStage.setHeight(height/2);
+		primaryStage.setResizable(false);
+		primaryStage.centerOnScreen();
+		Critter.displayWorld();
+		primaryStage.show();
        
        
 	   //----Make Action
@@ -255,6 +221,7 @@ public class CritterGUI extends Application{
 	       				Integer stepnum=Integer.parseInt(numberChosen);
 	       				System.out.print(stepnum);
 	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
+	       				Critter.displayWorld();
 	       			}
 	       		});	       		
 	       }
