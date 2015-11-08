@@ -34,6 +34,7 @@ import javafx.scene.control.Label;
 	import javafx.collections.ObservableList;  
 
 public class CritterGUI extends Application{
+	public Canvas canvas;
 
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
@@ -44,29 +45,10 @@ public class CritterGUI extends Application{
 		Scene s = new Scene(root, height, width, Color.WHITE);
 
 		//------Grid of Critters-------
-		ResizableCanvas canvas = new ResizableCanvas();
 		StackPane stackPane = new StackPane();
 		canvas.widthProperty().bind(stackPane.widthProperty());
 		canvas.heightProperty().bind(stackPane.heightProperty());
-		
-        //NumberBinding rectsAreaSize = Bindings.min(stackPane.heightProperty(), stackPane.heightProperty());
-/*        for(int y=0; y<Params.world_height; y++){
-        	for(int x=0; x<Params.world_width; x++ ){
-        		Rectangle rectangle = new Rectangle();
-        		rectangle.setStroke(Color.BLACK);
-        		rectangle.setFill(Color.WHITE);
-        		
-        		//binding rectangle positions to pane size
-        		rectangle.xProperty().bind(rectsAreaSize.multiply(x).divide(Params.world_width));
-                rectangle.yProperty().bind(rectsAreaSize.multiply(y).divide(Params.world_height));
 
-                // here we bind rectangle size to pane size 
-                rectangle.heightProperty().bind(rectsAreaSize.divide(Params.world_height));
-                rectangle.widthProperty().bind(rectsAreaSize.divide(Params.world_height));
-
-                root.getChildren().add(rectangle);
-        	}*/
-		//root.getChildren().add(canvas);
 
 //--------------Main Control Panel--------	
 		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
