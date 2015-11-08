@@ -56,15 +56,14 @@ public class CritterGUI extends Application{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
-		Critter.displayWorld();
 		Group root = new Group();
 
 		//------Grid of Critters-------
 		StackPane stackPane = new StackPane();
-		Scene s = new Scene(stackPane, width/2, height/2, Color.WHITE);
+		Scene s = new Scene(root, width/2, height/2, Color.WHITE);
 		canvas.setWidth(width/2);
 		canvas.setHeight(height/2);
-
+		Critter.displayWorld();
 
 //--------------Main Control Panel--------	
 		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
