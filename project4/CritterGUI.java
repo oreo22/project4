@@ -60,10 +60,11 @@ public class CritterGUI extends Application{
 
 		//------Grid of Critters-------
 		StackPane stackPane = new StackPane();
+		
 		Scene s = new Scene(root, width/2, height/2, Color.WHITE);
 		canvas.setWidth(width/2);
 		canvas.setHeight(height/2);
-		Critter.displayWorld();
+		
 
 //--------------Main Control Panel--------	
 		FlowPane controls= new FlowPane(Orientation.HORIZONTAL,10,10);
@@ -164,13 +165,14 @@ public class CritterGUI extends Application{
        
      //-------Setting up the display----
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
-       controls.relocate(30,250);
-       animeCluster.relocate(0,350);
-       critterBox.relocate(30,300);
-       numberBox.relocate(critterBox.getWidth()+200,300);
+       controls.relocate(630,250);
+       animeCluster.relocate(600,350);
+       critterBox.relocate(630,300);
+       numberBox.relocate(critterBox.getWidth()+800,300);
+       
        
        //----adding the controls
-       root.getChildren().add(canvas);
+       root.getChildren().add(stackPane);
        root.getChildren().add(controls);
        root.getChildren().add(animeCluster);
        root.getChildren().add(quitbtn);
@@ -180,7 +182,7 @@ public class CritterGUI extends Application{
        stackPane.setPadding(new Insets(10,10,10,10));
        StackPane.setAlignment(canvas, Pos.CENTER_LEFT);
        stackPane.getChildren().add(canvas);
-       root.getChildren().add(stackPane);
+       
        //----Disable unnecessary elements
        critterBox.setDisable(true);
        numberBox.setDisable(true);
@@ -190,6 +192,7 @@ public class CritterGUI extends Application{
 		primaryStage.setHeight(height/2);
 		primaryStage.setResizable(false);
 		primaryStage.centerOnScreen();
+		Critter.displayWorld();
 		primaryStage.show();
        
        
@@ -218,6 +221,7 @@ public class CritterGUI extends Application{
 	       				Integer stepnum=Integer.parseInt(numberChosen);
 	       				System.out.print(stepnum);
 	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
+	       				Critter.displayWorld();
 	       			}
 	       		});	       		
 	       }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -21,6 +22,36 @@ public abstract class Critter{
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static boolean fightPhase = false;
 	
+	public enum CritterShape {
+		CIRCLE,
+		SQUARE,
+		TRIANGLE,
+		DIAMOND,
+		STAR
+	}
+	
+	/* the default color is white, which I hope makes critters invisible by default
+	 * If you change the background color of your View component, then update the default
+	 * color to be the same as you background 
+	 * 
+	 * critters must override at least one of the following three methods, it is not 
+	 * proper for critters to remain invisible in the view
+	 * 
+	 * If a critter only overrides the outline color, then it will look like a non-filled 
+	 * shape, at least, that's the intent. You can edit these default methods however you 
+	 * need to, but please preserve that intent as you implement them. 
+	 */
+	public javafx.scene.paint.Color viewColor() { 
+		return javafx.scene.paint.Color.WHITE; 
+	}
+	
+	public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); }
+	public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
+	
+	public abstract CritterShape viewShape(); 
+	
+	protected void look(int direction) {}
+	protected void look2(int direction) {}
 	
 	
 	public static int getRandomInt(int max) {
@@ -290,18 +321,43 @@ public abstract class Critter{
 //----------Showing the Grid of the World-------
 	public static void displayWorld() {
 		GraphicsContext gc  = CritterGUI.canvas.getGraphicsContext2D();
-		for(int y=0; y<Params.world_height; y++){
-			for(int x=0; x<Params.world_width; x++){
-				gc.fillOval(x*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), y*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
-			}
-		}
+		gc.clearRect(0, 0, CritterGUI.canvas.getWidth(), CritterGUI.canvas.getHeight());
+		gc.setFill(Color.BLACK);
 		/*for(int n=0; n<population.size(); n++){
 			Color color = population.get(n).viewColor();
 			gc.setFill(color);
 			if(population.get(n).viewShape() == Critter.CritterShape.CIRCLE){
 				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
 			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.SQUARE){
+				 gc.fillRect(opulation.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), opulation.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.TRIANGLE){
+				
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.DIAMOND){
+				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
+			else if(population.get(n).viewShape() == Critter.CritterShape.STAR){
+				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
 		}*/
+		/*
+		double[] x2Points = {0,20, 10};
+		double[] y2Points = {20, 20, 0};
+		gc.fillPolygon(x2Points, y2Points, 3);*/
+		for(int y=0; y<Params.world_height; y++){
+			for(int x=0; x<Params.world_width; x++){
+				
+				double yPos = y*(CritterGUI.canvas.getHeight()/(Params.world_height));
+				double xPos = x*(CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double width = (CritterGUI.canvas.getWidth()/(Params.world_width*2));
+				double height = (CritterGUI.canvas.getHeight()/(Params.world_height*2));
+				double[] xPoints = {xPos,xPos+width, xPos+(width/2)};
+				double[] yPoints = {yPos+height, yPos+height, yPos};
+				gc.fillPolygon(xPoints, yPoints, 3);
+				}
+		}
 			
 	}
 }
