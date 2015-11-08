@@ -3,8 +3,6 @@ package project4;
 import javafx.application.Application;
 	import javafx.event.ActionEvent;
 	import javafx.event.EventHandler;
-	import javafx.beans.value.ChangeListener;
-	import javafx.beans.value.ObservableValue;
 	import javafx.geometry.Insets;
 	import javafx.geometry.Orientation;
 	import javafx.geometry.Pos;
@@ -16,21 +14,27 @@ import javafx.application.Application;
 	import javafx.scene.shape.*;
 	import javafx.scene.control.Button;
 	import javafx.scene.control.ComboBox;
+	import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-	import javafx.scene.control.TextArea;
+	import javafx.scene.control.PasswordField;
 	import javafx.scene.control.TextField;
+	import javafx.scene.layout.Pane;
+	import javafx.scene.layout.GridPane;
+	import javafx.scene.layout.HBox;
 	import javafx.scene.layout.StackPane;
 	import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+	import javafx.scene.paint.Color;
+	import javafx.scene.text.Font;
+	import javafx.scene.text.FontWeight;
+	import javafx.scene.text.Text;
 	import javafx.stage.Stage;
 	import javafx.util.StringConverter;
 	import javafx.collections.FXCollections;
 	import javafx.collections.ObservableList;  
 
 public class CritterGUI extends Application{
-	class ResizableCanvas extends Canvas {
+	   class ResizableCanvas extends Canvas {
 		   public ResizableCanvas() {
 	            // Redraw canvas when size changes.
 	            widthProperty().addListener(evt -> draw());
@@ -66,9 +70,7 @@ public class CritterGUI extends Application{
 	            return getHeight();
 	        }
 	    }
-	
-	String customNumber=" ";
-	
+
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
 		int height=500;   int width=500;
@@ -121,27 +123,15 @@ public class CritterGUI extends Application{
         
         final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
-		numberBox.setEditable(false);
-		/*		final TextField custom = new TextField("");
-				final TextArea text = new TextArea ("");
-				numberBox.setEditable(true);
-				numberBox.valueProperty().addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue ov, String t, String t1) {
-					customNumber = t1;
-				}
-				});
-				*/
-		//for the text field for the numbers
-		
-		Label label1 = new Label("Name:");
-		TextField textField = new TextField ();
-		HBox hb = new HBox();
-		hb.getChildren().addAll(label1, textField);
-		hb.setSpacing(10);
-		Button goBtn=new Button("Go");
-		
-		
+		final TextField subject = new TextField("");
+		final TextArea text = new TextArea ("");
+		numberBox.setEditable(true);
+		/*	numberBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue ov, String t, String t1) {
+			address = t1;
+			}
+			});*/
 		controls.getChildren().add(numberBox);
 		//-------Buttons-------
         //------Make Button---------
@@ -259,8 +249,8 @@ public class CritterGUI extends Application{
 	       			public void handle(ActionEvent number) {
 	       				String numberChosen=numberBox.getValue();
 	       				System.out.print("Selection done");
-	       				if(numberChosen.equals("Custom")){
-	       					numberChosen=customNumber;
+	       				if(numberChosen.equals("Chosen")){
+	       					
 	       				}
 	       				Integer stepnum=Integer.parseInt(numberChosen);
 	       				System.out.print(stepnum);
