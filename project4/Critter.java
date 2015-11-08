@@ -321,67 +321,21 @@ public abstract class Critter{
 //----------Showing the Grid of the World-------
 	public static void displayWorld() {
 		GraphicsContext gc  = CritterGUI.canvas.getGraphicsContext2D();
-		for(int n=0; n<population.size(); n++){
+		for(int y=0; y<Params.world_height; y++){
+			for(int x=0; x<Params.world_width; x++){
+				gc.fillOval(x*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), y*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
+			}
+		}
+		/*for(int n=0; n<population.size(); n++){
 			Color color = population.get(n).viewColor();
 			gc.setFill(color);
 			if(population.get(n).viewShape() == Critter.CritterShape.CIRCLE){
 				 gc.fillOval(population.get(n).x_coord*(CritterGUI.canvas.getWidth()/(Params.world_width*2)), population.get(n).y_coord*(CritterGUI.canvas.getHeight()/(Params.world_height)), (CritterGUI.canvas.getWidth()/(Params.world_width*5)), (CritterGUI.canvas.getHeight())/(Params.world_height*3));
 			}
-		}
-			
-		
-	/*	System.out.println();
-		for(int y=0; y<Params.world_height; y++){
-			System.out.print("|");
-			for(int x=0; x<Params.world_width; x++){ 
-				String output = " ";
-				if(grid.get(y).get(x)!=0){
-					int index=grid.get(y).get(x);
-					output=population.get(index).toString();
-				}
-				
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
-						output = Critter.population.get(c).toString();
-						break;
-					}
-				}
-				System.out.print(output);
-			}
-			System.out.print("|");
-			System.out.println();
 		}*/
+			
 	}
 	
-
-/*	static void updateGrid(){
-		for(int y=0; y<Params.world_height; y++){
-			Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
-			for(int x=0; x<Params.world_width; x++){ 
-				ArrayList<Integer> occupants=new ArrayList<Integer>();
-				for(int c=0; c<Critter.population.size(); c++){
-					if(Critter.population.get(c).x_coord==x && Critter.population.get(c).y_coord==y){
-						occupants.add(c); //add this index
-					}
-				}
-				xKeys.put(x,occupants); //make a bunch of x keys to arrays of indexes
-			}
-			CritterWorld.grid1.put( y, xKeys); //put the xkeys at that y position			
-		} 
-	}*/
 }
 
 
-//----Unused code-----
-/*switch (direction){
-case 0: if(y_coord == 0){ y_coord = Params.world_height-1;}else{y_coord = (y_coord-1)%Params.world_height;}			  break;
-case 1: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-case 2: x_coord=(x_coord+1)%Params.world_width;		  break;
-case 3: x_coord=(x_coord+1)%Params.world_width; y_coord=(y_coord+1)%Params.world_height; break;
-case 4: y_coord=(y_coord+1)%Params.world_height; 			  break;
-case 5: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} 
-		y_coord=(y_coord+1)%Params.world_height; break; //what if it is at 0
-case 6: if(x_coord == 0){x_coord = Params.world_width-1;}else{x_coord = (x_coord-1)%Params.world_width;} break;
-case 7: x_coord=(x_coord+1)%Params.world_width; if(y_coord == 0){ y_coord = Params.world_height;}else{y_coord = (y_coord-1)%Params.world_height;} break;
-default: System.out.println("Invalid direction. Try again."); break;
-}*/

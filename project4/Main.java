@@ -15,6 +15,7 @@ public static void invalidCommand(String commandLine){
 
 public static void main(String[] args) throws InvalidCritterException {
 		CritterGUI.canvas = new Canvas();
+		Critter.makeCritter("project4.Algae");
 		CritterGUI.launch(CritterGUI.class, args);
 		Scanner game=new Scanner(System.in); //do we need to read from file or keyboard
 		//CritterWorld.makeWorld();
