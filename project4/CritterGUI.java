@@ -1,5 +1,8 @@
 package project4;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javafx.application.Application;
 	import javafx.event.ActionEvent;
 	import javafx.event.EventHandler;
@@ -34,20 +37,34 @@ import javafx.scene.control.Label;
 	import javafx.collections.ObservableList;  
 
 public class CritterGUI extends Application{
-	public Canvas canvas;
-
+	public static Canvas canvas;
+	
+	
+/*	
+        stackPane.setPadding(new Insets(10,10,10,10));
+        StackPane.setAlignment(canvas, Pos.CENTER);
+        
+		primaryStage.setScene(s);
+		
+		primaryStage.setWidth(width/2);
+		primaryStage.setHeight(height/2);
+		primaryStage.setResizable(false);
+		primaryStage.centerOnScreen();
+		primaryStage.show();*/
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Critter Simulation");
-		int height=500;   int width=500;
-		primaryStage.setHeight(height);
-		primaryStage.setWidth(width);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		Critter.displayWorld();
 		Group root = new Group();
-		Scene s = new Scene(root, height, width, Color.WHITE);
 
 		//------Grid of Critters-------
 		StackPane stackPane = new StackPane();
-		canvas.widthProperty().bind(stackPane.widthProperty());
-		canvas.heightProperty().bind(stackPane.heightProperty());
+		stackPane.getChildren().add(canvas);
+		Scene s = new Scene(stackPane, width/2, height/2, Color.WHITE);
+		canvas.setWidth(width/2);
+		canvas.setHeight(height/2);
 
 
 //--------------Main Control Panel--------	
@@ -170,10 +187,12 @@ public class CritterGUI extends Application{
        critterBox.setDisable(true);
        numberBox.setDisable(true);
        //----ShowTime--------
-       primaryStage.setScene(s);
-       primaryStage.setWidth(1000);	
-       primaryStage.setHeight(700);
-       primaryStage.show();
+		primaryStage.setScene(s);
+		primaryStage.setWidth(width/2);
+		primaryStage.setHeight(height/2);
+		primaryStage.setResizable(false);
+		primaryStage.centerOnScreen();
+		primaryStage.show();
        
        
 	   //----Make Action
