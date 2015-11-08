@@ -85,16 +85,14 @@ public class CritterGUI extends Application{
         
         final ComboBox<String> numberBox = new ComboBox<String>();
 		numberBox.setPromptText("Number Selection");
-		final TextField subject = new TextField("");
-		final TextArea text = new TextArea ("");
-		numberBox.setEditable(true);
-		/*	numberBox.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue ov, String t, String t1) {
-			address = t1;
-			}
-			});*/
-		controls.getChildren().add(numberBox);
+		TextField customValues=new TextField();
+		Button submit=new Button("Go!");
+		HBox textSubmit= new HBox(2);
+		textSubmit.getChildren().add(numberBox);
+		textSubmit.getChildren().add(customValues);
+		textSubmit.getChildren().add(submit);
+		
+		
 		//-------Buttons-------
         //------Make Button---------
 		Button makebtn = new Button("Make"); //gotta change this to make it scalable
@@ -112,7 +110,8 @@ public class CritterGUI extends Application{
 		//------Quit Button---------
        Button quitbtn=new Button("X");
        quitbtn.setTextFill(Color.RED);
-       quitbtn.setAlignment(Pos.TOP_LEFT);
+     //  quitbtn.setAlignment(Pos.BOTTOM_RIGHT);
+       quitbtn.relocate((width-(width/8))/2, 0);
        
        //------Animation Cluster----
        FlowPane animeCluster=new FlowPane(Orientation.HORIZONTAL, 10,0);
@@ -132,10 +131,10 @@ public class CritterGUI extends Application{
            @Override
            public String toString(Double n) {
                if (n < 16) return "2";
-               if (n <= 32 && n > 16 ) return "5";
-               if (n <= 48 && n > 32) return "10";
-               if (n <= 64 && n > 48) return "20";
-               if (n <= 80 && n > 64) return "50";
+               else if (n <= 32 && n > 16 ) return "5";
+               else if (n <= 48 && n > 32) return "10";
+               else if (n <= 64 && n > 48) return "20";
+               else if (n <= 80 && n > 64) return "50";
                return "100";
            }
 
@@ -165,11 +164,12 @@ public class CritterGUI extends Application{
        
      //-------Setting up the display----
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
-       controls.relocate(630,250);
-       animeCluster.relocate(600,350);
-       critterBox.relocate(630,300);
-       numberBox.relocate(critterBox.getWidth()+800,300);
-       
+       controls.relocate(width/4+width/32,height/5);
+       animeCluster.relocate(width/5,height/3);
+       critterBox.relocate(width/4+width/64,height/4);
+       textSubmit.relocate(critterBox.getWidth()+800,300);
+       numberBox.relocate(width/4+width/10+width/64,height/4);
+       customValues.relocate(numberBox.getLayoutX(), numberBox.getLayoutY());
        
        //----adding the controls
        root.getChildren().add(stackPane);
@@ -185,12 +185,14 @@ public class CritterGUI extends Application{
        
        //----Disable unnecessary elements
        critterBox.setDisable(true);
+       textSubmit.setDisable(true);
        numberBox.setDisable(true);
+       
        //----ShowTime--------
 		primaryStage.setScene(s);
 		primaryStage.setWidth(width/2);
 		primaryStage.setHeight(height/2);
-		primaryStage.setResizable(false);
+		primaryStage.setResizable(true);
 		primaryStage.centerOnScreen();
 		Critter.displayWorld();
 		primaryStage.show();
@@ -210,18 +212,22 @@ public class CritterGUI extends Application{
 	    	   //find out how they'll select it
 	       		numberBox.setDisable(false);
 	    		numberBox.setItems(stepOpts);
+	    		numberBox.setPromptText("Choose/Enter a Number");
+	    		numberBox.setEditable(true);
 	       		numberBox.setOnAction(new EventHandler<ActionEvent>() {
 	       			@Override
 	       			public void handle(ActionEvent number) {
 	       				String numberChosen=numberBox.getValue();
 	       				System.out.print("Selection done");
-	       				if(numberChosen.equals("Chosen")){
-	       					
+	       				if(numberChosen.equals("Custom")){
+	       					textSubmit.setDisable(false);
+	       					// still broken
 	       				}
 	       				Integer stepnum=Integer.parseInt(numberChosen);
 	       				System.out.print(stepnum);
 	       				CritterWorld.runWorld(stepnum);//idk if this is the best decision...
 	       				Critter.displayWorld();
+	       				numberBox.setDisable(true);
 	       			}
 	       		});	       		
 	       }
@@ -231,6 +237,7 @@ public class CritterGUI extends Application{
 	   stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
+	            	
 	            	controls.setDisable(true);
 	            	if(playbtn.isPressed()){
 	            		controls.setDisable(false);
@@ -240,6 +247,12 @@ public class CritterGUI extends Application{
 	   playbtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
+	            	controls.setDisable(true);
+	            	playbtn.setText("o");
+	            	double animeSpeed=speed.getValue();
+	            	for(int x=0; x<animeSpeed; x++){
+	            		Critter.displayWorld();
+	            	}
 	            	
 	            }
 	   });
@@ -252,6 +265,14 @@ public class CritterGUI extends Application{
            }
 	   });
 
+	}
+	public double speedValue(double n){
+        if (n < 16) return 2.0;
+        else if (n <= 32 && n > 16 ) return 5.0;
+        else if (n <= 48 && n > 32) return 10.0;
+        else if (n <= 64 && n > 48) return 20.0;
+        else if (n <= 80 && n > 64) return 50.0;
+        else { return 100.0;}
 	}
 }
 
