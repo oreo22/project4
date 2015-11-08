@@ -61,8 +61,7 @@ public class CritterGUI extends Application{
 
 		//------Grid of Critters-------
 		StackPane stackPane = new StackPane();
-		stackPane.getChildren().add(canvas);
-		Scene s = new Scene(root, width/2, height/2, Color.WHITE);
+		Scene s = new Scene(stackPane, width/2, height/2, Color.WHITE);
 		canvas.setWidth(width/2);
 		canvas.setHeight(height/2);
 
