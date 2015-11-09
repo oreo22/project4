@@ -187,7 +187,7 @@ public class CritterGUI extends Application{
      //-------Setting up the display----
        //-------Layout of the buttons----- /Diego!/MAKE THIS SCALABLE
        controls.relocate(width * 9/32,height/5);
-       animeCluster.relocate(width/5,height/3);
+       animeCluster.relocate(width/4.5,height/3);
        critterBox.relocate(width * 17/64,height/4);
        //textSubmit.relocate(critterBox.getWidth()+800,300);
        numberBox.relocate(width*117/320,height/4);
