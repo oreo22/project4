@@ -4,6 +4,10 @@ package project4;
 	import java.awt.Toolkit;
 import java.util.List;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 	import javafx.event.ActionEvent;
 	import javafx.event.EventHandler;
@@ -33,7 +37,8 @@ import javafx.application.Application;
 	import javafx.scene.text.FontWeight;
 	import javafx.scene.text.Text;
 	import javafx.stage.Stage;
-	import javafx.util.StringConverter;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 	import javafx.collections.FXCollections;
 	import javafx.collections.ObservableList;  
 
@@ -319,25 +324,40 @@ public class CritterGUI extends Application{
 	*/
 	   
 	   //-----AnimeClusterAction------
-	   stopbtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	
-	            	controls.setDisable(true);
-	            	if(playbtn.isPressed()){
-	            		controls.setDisable(false);
-	            	}
-	            }
-	   });
+	   
 	   playbtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
+	            	
+	            	
 	            	controls.setDisable(true);
-	            	playbtn.setText("o");
-	            	double animeSpeed=speed.getValue();
-	            	for(int x=0; x<animeSpeed; x++){
-	            		Critter.displayWorld();
-	            	}
+	            	int animationTime = (int)speedValue(speed.getValue());
+	            		
+	            	//Keep running until stop button is pressed//
+	            		
+	            	Timeline timeline = new Timeline(
+	                        new KeyFrame(Duration.millis(250), ae -> CritterWorld.runWorld(animationTime)),
+	                        new KeyFrame(Duration.millis(250), ae -> Critter.displayWorld())
+	                    );
+	                    timeline.setAutoReverse(true);
+	                    timeline.setCycleCount(Timeline.INDEFINITE);
+
+	                  
+	                    timeline.play();
+	                	playbtn.setDisable(true);
+	                	speed.setDisable(true);
+	                    
+	                    
+	                    stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+	        	            @Override
+	        	            public void handle(ActionEvent e) {
+	        	            	controls.setDisable(false);
+	        	            	speed.setDisable(false);
+	        	            	playbtn.setDisable(false);
+	        	            	timeline.stop();
+
+	        	            }
+	        	   });
 	            	
 	            }
 	   });

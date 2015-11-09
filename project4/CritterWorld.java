@@ -49,7 +49,6 @@ public class CritterWorld {
 	static void runWorld(int steps) {
 		for(int x=0; x<steps;x++){
 			Critter.worldTimeStep();//run all the time steps
-			//updateGrid();
 		}
 	}
 	
