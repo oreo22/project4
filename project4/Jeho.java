@@ -90,7 +90,7 @@ public class Jeho extends Critter{
 				phd++;
 			}
 		}
-		System.out.println("There are " + bachelors + " Jeho(s) workong on their bachelors");
+		System.out.println("There are " + bachelors + " Jeho(s) working on their bachelors");
 		System.out.println("There are " + masters + " Jeho(s) working on their masters");
 		System.out.println("There are " + phd + " Jeho(s) working on their phd and can take down Craig");
 		
@@ -98,10 +98,10 @@ public class Jeho extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		return CritterShape.DIAMOND;
+		return CritterShape.SQUARE;
 	}
 
 	
-	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.RED; }
-	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.BLUE; }
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.DARKRED; }
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.DARKBLUE; }
 }

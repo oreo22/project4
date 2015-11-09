@@ -3,6 +3,8 @@ package project4;
  * Oriana Wong (oyw58)
  */
 
+import project4.Critter.CritterShape;
+
 /*Description: Students are critters that have different characteristics based on their "grade" or energy
  * doTimeStep: Student just walks in a random direction based on its energy. 
  * If they're an A student though, they can reproduce. Cause we need as many A students we can get.
@@ -82,7 +84,9 @@ public class Student extends Critter{
 
 	@Override
 	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
+		return CritterShape.DIAMOND;
 	}
+	//public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.YELLOW; }
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.LIGHTGREEN; }
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.DODGERBLUE; }
 }
