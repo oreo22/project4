@@ -8,7 +8,7 @@ public class Main {
 public static void main(String[] args) throws InvalidCritterException {
 		CritterGUI.canvas = new Canvas();
 		CritterGUI.launch(CritterGUI.class, args);
-	
+		
 
 	}
 }

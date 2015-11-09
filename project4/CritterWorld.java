@@ -8,32 +8,6 @@ import java.util.Map;
 
 
 public class CritterWorld {
-
-//static Map<int[],ArrayList<Integer> > grid=new HashMap<int[], ArrayList<Integer>>();
-//static Map<Integer, ArrayList<Integer> > xKeys=new HashMap<Integer, ArrayList<Integer>>(Params.world_width);
-//Correct Map//static Map<Integer, Map<Integer, ArrayList<Integer> >> grid1=new HashMap<Integer, Map<Integer, ArrayList<Integer> >>(Params.world_height);
-//static Map<Integer, ArrayList<Integer> > grid2=new HashMap<Integer, ArrayList<Integer> >();
-
-
-		
-/*static void updateGrid(){
-
-		for(int y=0; y<Params.world_height; y++){
-			
-			for(int x=0; x<Params.world_width; x++){ 
-				ArrayList<Integer> occupants=new ArrayList<Integer>();
-				for(int c=0; c<population.size(); c++){
-					if(population.get(c).getXCoord()==x && population.get(c).getYCoord()==y){
-						occupants.add(c); //add this index
-						/*System.out.println(population.get(c).getXCoord() + " " + population.get(c).getYCoord()  );
-						System.out.println("x: " +x+ " y: " + y);
-					}
-				}
-				grid.put(y,occupants);
-			}
-		}
-	} */
-
 //--------------Generating the World--------------	
 	static void makeWorld() throws InvalidCritterException {
 		for(int x=0; x<3; x++){
@@ -42,7 +16,6 @@ public class CritterWorld {
 		for(int x=0; x<10; x++){
 			Critter.makeCritter("project4.Algae");
 		}
-		//updateGrid();
 	}
 
 //-------------Running the World---------------
@@ -67,28 +40,4 @@ public class CritterWorld {
 		}
 		System.out.print("+");
 	}
-	
-	
-/*	private static void createWorld(){
-		//Top
-		critterWorld[0][0] = "+";
-		critterWorld[0][Params.world_width+1] = "+";
-		for(int x=1; x<Params.world_width; x++){
-			critterWorld[0][x] = "-";
-		}
-		for(int row=1; row<Params.world_height+1; row++){
-			critterWorld[row][0] = "|";
-			for(int col =1; col<Params.world_width; col++){
-				critterWorld[row][col] = " ";
-			}
-			critterWorld[row][Params.world_height+1] = "|";
-		}
-		
-		critterWorld[Params.world_height+1][0] = "+";
-		critterWorld[Params.world_height+1][Params.world_width+1] = "+";
-		for(int x=1; x<Params.world_width; x++){
-			critterWorld[Params.world_height+1][x] = "-";
-		}
-	}*/
-
 }

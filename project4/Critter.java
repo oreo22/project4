@@ -174,12 +174,14 @@ public abstract class Critter{
 		if(this.energy <= Params.min_reproduce_energy){
 			return;
 		}
-			offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
+			//offspring.energy = (int) Math.floor(this.energy/2) + Params.walk_energy_cost;
+			offspring.energy=(this.energy/2)+Params.walk_energy_cost;
 			offspring.x_coord = offspring.x_coord;
 			offspring.y_coord = offspring.y_coord;
 			offspring.walk(direction);
 			babies.add(offspring);
-			this.energy = (int) Math.ceil(this.energy/2);
+			//this.energy = (int) Math.ceil(this.energy/2);
+			this.energy=(this.energy/2);
 	}
 
 	public abstract void doTimeStep();
@@ -283,7 +285,6 @@ public abstract class Critter{
 			Critter.population.get(x).energy -= Params.rest_energy_cost;
 			Critter.population.get(x).doTimeStep(); 
 		}
-		//updateGrid();//For map implementation
 		handleEncounters();
 		killCritters();
 		populatebabies();
