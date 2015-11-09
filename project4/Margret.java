@@ -38,7 +38,7 @@ public class Margret extends Critter{
 		return CritterShape.TRIANGLE;
 	}
 	
-	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.PURPLE; }
-	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
+	public javafx.scene.paint.Color viewFillColor() { return javafx.scene.paint.Color.LAVENDER; }
+	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.DARKSLATEBLUE; }
 
 }

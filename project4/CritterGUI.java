@@ -1,7 +1,9 @@
+
 package project4;
 
 	import java.awt.Dimension;
 	import java.awt.Toolkit;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javafx.application.Application;
@@ -277,6 +279,7 @@ public class CritterGUI extends Application{
 	       					Critter.displayWorld();
 	       					animeCluster.setDisable(false);
 	       					controls.setDisable(false);
+	       					numberBox.setDisable(true);
 	       				}
 	       			}
 	       		});	       		
@@ -314,9 +317,35 @@ public class CritterGUI extends Application{
 	       });
 	   
 	   //----Stats Action---
-	   /*Object obj = Class.forName(commands[1]).newInstance();
-	   Class.forName(commands[1]).getMethod("runStats", List.class).invoke(obj, Critter.getInstances(commands[1]));
-	*/
+	   
+	   statsbtn.setOnAction(new EventHandler<ActionEvent>() {
+	       @Override
+	       public void handle(ActionEvent e) {
+	    	   	controls.setDisable(true);
+	    	   	animeCluster.setDisable(true);
+	       		critterBox.setDisable(false);
+	       		critterBox.setItems(crittersOptions);
+	       		critterBox.getSelectionModel().clearSelection();
+	       		critterBox.setOnAction(new EventHandler<ActionEvent>() {
+	       			@Override
+	       			public void handle(ActionEvent number) {
+	       				controls.setDisable(true);
+	       				String critterChoosen="project4." + critterBox.getSelectionModel().getSelectedItem();
+						try {
+							Object obj = Class.forName(critterChoosen).newInstance();
+							Class.forName(critterChoosen).getMethod("runStats", List.class).invoke(obj, Critter.getInstances(critterChoosen));
+							controls.setDisable(false);
+							animeCluster.setDisable(false);
+							critterBox.setDisable(true);
+						} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | 
+								IllegalArgumentException | InvocationTargetException | NoSuchMethodException | 
+								SecurityException | InvalidCritterException e) {
+						}
+						
+	       			}
+	       		});	       		
+	       }
+	       });
 	   
 	   //-----AnimeClusterAction------
 	   stopbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -360,17 +389,3 @@ public class CritterGUI extends Application{
         else { return 100.0;}
 	}
 }
-
-		/*critterBox.setDisable(false);
-		critterBox.setValue("Craig");
-		critterBox.setOnAction(new EventHandler<ActionEvent>() {
-	    	
-			@Override
-			public void handle(ActionEvent number) {
-				String critterChosen=critterBox.getValue();
-				String critterFullName="project4."+critterChosen;
-				//how do i get this value out of the method?
-			}
-	    	
-	    });   
-		critterBox.setDisable(true);*/
